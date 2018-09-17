@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Take a Note</string>
+    <string name="movie_tab">Movies</string>
+    <string name="tv_tab">TV</string>
+    <string name="music_tab" >Music</string>
+    <string name="main_navigation">More Info</string>
+    <string name="gallery">gallery</string>
+    <string name="slideshow">slideshow</string>
+    <string name="tools">tools</string>
+    <string name="imports">import</string>
+    <string name="home_tab">Home</string>
+
+</resources>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home_nav_tab"
+        android:title="@string/home_tab"
+        android:icon="@drawable/ic_home"
+        android:iconTint="@color/colorPrimary"/>
+
+    <item
+        android:id="@+id/movie_nav_tab"
+        android:title="@string/movie_tab"
+        android:icon="@drawable/ic_movie"
+        android:iconTint="@color/colorPrimary"/>
+
+    <item
+        android:id="@+id/tv_nav_tab"
+        android:title="@string/tv_tab"
+        android:icon="@drawable/ic_tv"
+        android:iconTint="@color/colorPrimary"/>
+
+    <item
+        android:id="@+id/music_nav_tab"
+        android:title="@string/music_tab"
+        android:icon="@drawable/ic_music"
+        android:iconTint="@color/colorPrimary"/>
+</menu>
