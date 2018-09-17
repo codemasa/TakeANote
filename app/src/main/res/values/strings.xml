@@ -9,5 +9,9 @@
     <string name="tools">tools</string>
     <string name="imports">import</string>
     <string name="home_tab">Home</string>
+    <string name="notes">Notes</string>
+    <string name="profile">Profile</string>
+    <string name="favorites">Favorites</string>
+    <string name="backlog">Backlog</string>
 
 </resources>

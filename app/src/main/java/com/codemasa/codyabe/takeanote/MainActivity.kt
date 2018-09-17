@@ -6,6 +6,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.NavigationView
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBar
@@ -13,23 +14,23 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import java.lang.reflect.Field
 
 class MainActivity : AppCompatActivity() {
 
     internal lateinit var mDrawerLayout: DrawerLayout
-    internal lateinit var mBottomNav: BottomNavigationView
     internal val TAG = MainActivity::class.java.simpleName
+    internal lateinit var currentFragment : Fragment
+    internal lateinit var drawerNotesFragment: DrawerNotesFragment
+
 
     companion object {
+        var CURRENT_DRAWER_FRAGMENT_KEY = "CURRENT_DRAWER_FRAGMENT_KEY"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val currentFragment = HomeFragment.newInstance()
-        openFragment(currentFragment)
-
-
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         val actionbar: ActionBar? = supportActionBar
@@ -37,23 +38,47 @@ class MainActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_menu)
         }
-
-
+        //setting the layout for the drawer layout
         mDrawerLayout = findViewById(R.id.drawer_layout)
-        mBottomNav = findViewById(R.id.entertainment_category)
 
+        drawerNotesFragment = DrawerNotesFragment.newInstance()
+
+
+
+        
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener { menuItem ->
             // set item as selected to persist highlight
             menuItem.isChecked = true
+
             // close drawer when item is tapped
             mDrawerLayout.closeDrawers()
-
             // Add code here to update the UI based on the item selected
             // For example, swap UI fragments here
+            when (menuItem.itemId){
+                R.id.nav_profile -> {
 
-            true
+                }
+                R.id.nav_notes -> {
+                    currentFragment = drawerNotesFragment
+                    openFragment(drawerNotesFragment)
+                    return@setNavigationItemSelectedListener true
+                }
+                R.id.nav_favories -> {
+
+                }
+                R.id.nav_backlog -> {
+
+                }
+                R.id.nav_manage -> {
+
+                }
+            }
+
+
+            false
         }
+
         mDrawerLayout.addDrawerListener(
                 object : DrawerLayout.DrawerListener {
                     override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
@@ -73,31 +98,8 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
         )
-        mBottomNav.setOnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.home_nav_tab -> {
-                    val homeFragment = HomeFragment.newInstance()
-                    openFragment(homeFragment)
-                    return@setOnNavigationItemSelectedListener true
-                }
-                R.id.movie_nav_tab -> {
-                    val moviesFragment = MoviesFragment.newInstance()
-                    openFragment(moviesFragment)
-                    return@setOnNavigationItemSelectedListener true
-                }
-                R.id.tv_nav_tab -> {
-                    val tvFragment = TVFragment.newInstance()
-                    openFragment(tvFragment)
-                    return@setOnNavigationItemSelectedListener true
-                }
-                R.id.music_nav_tab -> {
-                    val musicFragment = MusicFragment.newInstance()
-                    openFragment(musicFragment)
-                    return@setOnNavigationItemSelectedListener true
-                }
-            }
-            false
-        }
+
+
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -109,19 +111,25 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     override fun onBackPressed() {
         super.onBackPressed()
 
+
     }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+        supportFragmentManager.putFragment(outState, CURRENT_DRAWER_FRAGMENT_KEY,currentFragment)
         Log.d(TAG, "onSaveInstanceState: Saving Fragment ")
     }
+
+
     private fun openFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.bot_nav_container, fragment)
-        transaction.addToBackStack(null)
+        transaction.replace(R.id.content_frame, fragment)
         transaction.commit()
     }
+
 
 }
