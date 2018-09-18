@@ -1,7 +1,10 @@
 package com.codemasa.codyabe.takeanote
 
+import android.content.Intent
 import android.os.Bundle
+import android.os.Debug
 import android.support.design.widget.BottomNavigationView
+import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
@@ -26,13 +29,13 @@ class DrawerNotesFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = inflater.inflate(R.layout.fragment_drawer_notes, container, false)
         mBottomNav = view.findViewById(R.id.entertainment_category)
-
-
-
         homeFragment = HomeFragment.newInstance()
         moviesFragment = MoviesFragment.newInstance()
         musicFragment = MusicFragment.newInstance()
         tvFragment = TVFragment.newInstance()
+
+
+
 
         if (savedInstanceState != null) {
             currentFragment = childFragmentManager.getFragment(savedInstanceState, CURRENT_FRAGMENT_KEY)
@@ -68,6 +71,11 @@ class DrawerNotesFragment : Fragment() {
             }
             false
         }
+        var floatingActionButton : FloatingActionButton = view.findViewById(R.id.add_note_button)
+        floatingActionButton.setOnClickListener {view->
+            val intent : Intent = NoteEditActivity.newIntent(view.context)
+            startActivity(intent)
+        }
 
 
         return view
@@ -88,5 +96,6 @@ class DrawerNotesFragment : Fragment() {
         transaction.replace(R.id.bot_nav_container, fragment, fragment.tag)
         transaction.commit()
     }
+
 
 }
