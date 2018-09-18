@@ -23,6 +23,14 @@
             android:id="@+id/nav_manage"
             android:icon="@android:drawable/ic_menu_manage"
             android:title="@string/tools" />
+        <item
+            android:id="@+id/app_bar_switch"
+            android:checkable="false"
+            android:checked="false"
+            android:enabled="false"
+            android:title="@string/theme"
+            app:actionLayout="@layout/switch_item"
+            app:showAsAction="always" />
     </group>
 
 </menu>

@@ -22,6 +22,10 @@ class MainActivity : AppCompatActivity() {
     internal val TAG = MainActivity::class.java.simpleName
     internal lateinit var currentFragment : Fragment
     internal lateinit var drawerNotesFragment: DrawerNotesFragment
+    internal lateinit var drawerProfileFragment: DrawerProfileFragment
+    internal lateinit var drawerFavoritesFragment: DrawerFavoritesFragment
+    internal lateinit var drawerBacklogFragment: DrawerBacklogFragment
+    internal lateinit var drawerSettingsFragment: DrawerSettingsFragment
 
 
     companion object {
@@ -42,10 +46,24 @@ class MainActivity : AppCompatActivity() {
         mDrawerLayout = findViewById(R.id.drawer_layout)
 
         drawerNotesFragment = DrawerNotesFragment.newInstance()
+        drawerProfileFragment = DrawerProfileFragment.newInstance()
+        drawerFavoritesFragment = DrawerFavoritesFragment.newInstance()
+        drawerBacklogFragment = DrawerBacklogFragment.newInstance()
+        drawerSettingsFragment = DrawerSettingsFragment.newInstance()
+
+
+        if(savedInstanceState != null){
+            currentFragment = supportFragmentManager.getFragment(savedInstanceState, CURRENT_DRAWER_FRAGMENT_KEY)
+            openFragment(currentFragment)
+        }
+        else{
+            currentFragment = drawerNotesFragment
+            openFragment(drawerNotesFragment)
+        }
 
 
 
-        
+
         val navigationView: NavigationView = findViewById(R.id.nav_view)
         navigationView.setNavigationItemSelectedListener { menuItem ->
             // set item as selected to persist highlight
@@ -57,7 +75,9 @@ class MainActivity : AppCompatActivity() {
             // For example, swap UI fragments here
             when (menuItem.itemId){
                 R.id.nav_profile -> {
-
+                    currentFragment = drawerProfileFragment
+                    openFragment(drawerProfileFragment)
+                    return@setNavigationItemSelectedListener true
                 }
                 R.id.nav_notes -> {
                     currentFragment = drawerNotesFragment
@@ -65,13 +85,19 @@ class MainActivity : AppCompatActivity() {
                     return@setNavigationItemSelectedListener true
                 }
                 R.id.nav_favories -> {
-
+                    currentFragment = drawerFavoritesFragment
+                    openFragment(drawerFavoritesFragment)
+                    return@setNavigationItemSelectedListener true
                 }
                 R.id.nav_backlog -> {
-
+                    currentFragment = drawerBacklogFragment
+                    openFragment(drawerBacklogFragment)
+                    return@setNavigationItemSelectedListener true
                 }
                 R.id.nav_manage -> {
-
+                    currentFragment = drawerSettingsFragment
+                    openFragment(drawerSettingsFragment)
+                    return@setNavigationItemSelectedListener true
                 }
             }
 

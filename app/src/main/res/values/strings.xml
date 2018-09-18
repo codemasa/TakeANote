@@ -13,5 +13,7 @@
     <string name="profile">Profile</string>
     <string name="favorites">Favorites</string>
     <string name="backlog">Backlog</string>
+    <string name="drawer_header">Take a Note</string>
+    <string name="theme">Theme</string>
 
 </resources>

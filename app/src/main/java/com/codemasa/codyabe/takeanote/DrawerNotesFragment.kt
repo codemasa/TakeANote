@@ -19,6 +19,7 @@ class DrawerNotesFragment : Fragment() {
 
     companion object {
         private val CURRENT_FRAGMENT_KEY = "CURRENT_FRAGMENT_KEY"
+        private val CURRENT_NAV_ID = "CURRENT_NAV_ID"
         fun newInstance(): DrawerNotesFragment = DrawerNotesFragment()
     }
 
@@ -27,21 +28,22 @@ class DrawerNotesFragment : Fragment() {
         mBottomNav = view.findViewById(R.id.entertainment_category)
 
 
+
         homeFragment = HomeFragment.newInstance()
         moviesFragment = MoviesFragment.newInstance()
         musicFragment = MusicFragment.newInstance()
         tvFragment = TVFragment.newInstance()
 
-
         if (savedInstanceState != null) {
             currentFragment = childFragmentManager.getFragment(savedInstanceState, CURRENT_FRAGMENT_KEY)
+            openFragment(currentFragment)
         }
         else{
             currentFragment = homeFragment
             openFragment(currentFragment)
         }
-
         mBottomNav.setOnNavigationItemSelectedListener { item ->
+            item.isChecked = true
             when (item.itemId) {
                 R.id.home_nav_tab -> {
                     currentFragment = homeFragment
@@ -66,6 +68,8 @@ class DrawerNotesFragment : Fragment() {
             }
             false
         }
+
+
         return view
     }
     override fun onSaveInstanceState(outState: Bundle) {
@@ -74,10 +78,14 @@ class DrawerNotesFragment : Fragment() {
         Log.d(TAG, "onSaveInstanceState: Saving Fragment ")
     }
 
+    override fun onResume() {
+        super.onResume()
+        mBottomNav.menu.getItem(0).isChecked = true
+    }
 
     private fun openFragment(fragment: Fragment) {
         val transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.bot_nav_container, fragment)
+        transaction.replace(R.id.bot_nav_container, fragment, fragment.tag)
         transaction.commit()
     }
 
