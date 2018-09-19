@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 
@@ -39,33 +40,33 @@ class DrawerNotesFragment : Fragment() {
 
         if (savedInstanceState != null) {
             currentFragment = childFragmentManager.getFragment(savedInstanceState, CURRENT_FRAGMENT_KEY)
-            openFragment(currentFragment)
+            openFragment(currentFragment, null)
         }
         else{
             currentFragment = homeFragment
-            openFragment(currentFragment)
+            openFragment(homeFragment, null)
         }
         mBottomNav.setOnNavigationItemSelectedListener { item ->
             item.isChecked = true
             when (item.itemId) {
                 R.id.home_nav_tab -> {
                     currentFragment = homeFragment
-                    openFragment(homeFragment)
+                    openFragment(homeFragment,null)
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.movie_nav_tab -> {
                     currentFragment = moviesFragment
-                    openFragment(moviesFragment)
+                    openFragment(moviesFragment,null)
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.tv_nav_tab -> {
                     currentFragment = tvFragment
-                    openFragment(tvFragment)
+                    openFragment(tvFragment,null)
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.music_nav_tab -> {
                     currentFragment = musicFragment
-                    openFragment(musicFragment)
+                    openFragment(musicFragment,null)
                     return@setOnNavigationItemSelectedListener true
                 }
             }
@@ -81,20 +82,23 @@ class DrawerNotesFragment : Fragment() {
         return view
     }
     override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
         childFragmentManager.putFragment(outState, CURRENT_FRAGMENT_KEY,currentFragment)
         Log.d(TAG, "onSaveInstanceState: Saving Fragment ")
+        super.onSaveInstanceState(outState)
     }
+
 
     override fun onResume() {
         super.onResume()
-        mBottomNav.menu.getItem(0).isChecked = true
     }
 
-    private fun openFragment(fragment: Fragment) {
+    public fun openFragment(fragment: Fragment, itemIndex : Int?) {
         val transaction = childFragmentManager.beginTransaction()
         transaction.replace(R.id.notes_layout, fragment, fragment.tag)
         transaction.commit()
+        if(itemIndex != null){
+            mBottomNav.menu.getItem(itemIndex).isChecked = true
+        }
     }
 
 

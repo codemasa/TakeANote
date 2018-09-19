@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     internal lateinit var drawerBacklogFragment: DrawerBacklogFragment
     internal lateinit var drawerSettingsFragment: DrawerSettingsFragment
     internal lateinit var drawerSearchFragment: DrawerSearchFragment
+    internal lateinit var searchBar : SearchView
 
 
     companion object {
@@ -47,7 +48,7 @@ class MainActivity : AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.ic_menu)
             setTitle(R.string.take_a_note)
         }
-        val searchBar : SearchView = findViewById(R.id.media_search)
+        searchBar = findViewById(R.id.media_search)
         searchBar.visibility = View.GONE
         //setting the layout for the drawer layout
         mDrawerLayout = findViewById(R.id.drawer_layout)
@@ -87,6 +88,9 @@ class MainActivity : AppCompatActivity() {
                     currentFragmentID = R.id.nav_profile
                     currentFragment = drawerProfileFragment
                     openFragment(drawerProfileFragment)
+                    actionbar?.setTitle(R.string.take_a_note)
+                    searchBar.visibility = View.GONE
+                    searchBar.isIconified = true
                     return@setNavigationItemSelectedListener true
                 }
                 R.id.nav_notes -> {
@@ -94,6 +98,9 @@ class MainActivity : AppCompatActivity() {
 
                     currentFragment = drawerNotesFragment
                     openFragment(drawerNotesFragment)
+                    actionbar?.setTitle(R.string.take_a_note)
+                    searchBar.visibility = View.GONE
+                    searchBar.isIconified = true
                     return@setNavigationItemSelectedListener true
                 }
                 R.id.nav_favories -> {
@@ -101,6 +108,9 @@ class MainActivity : AppCompatActivity() {
 
                     currentFragment = drawerFavoritesFragment
                     openFragment(drawerFavoritesFragment)
+                    actionbar?.setTitle(R.string.take_a_note)
+                    searchBar.visibility = View.GONE
+                    searchBar.isIconified = true
                     return@setNavigationItemSelectedListener true
                 }
                 R.id.nav_backlog -> {
@@ -108,14 +118,19 @@ class MainActivity : AppCompatActivity() {
 
                     currentFragment = drawerBacklogFragment
                     openFragment(drawerBacklogFragment)
+                    actionbar?.setTitle(R.string.take_a_note)
+                    searchBar.visibility = View.GONE
+                    searchBar.isIconified = true
                     return@setNavigationItemSelectedListener true
                 }
                 R.id.nav_search -> {
                     currentFragmentID = R.id.nav_search
-
                     currentFragment = drawerSearchFragment
                     openFragment(drawerSearchFragment)
-                    
+                    actionbar?.title = ""
+                    searchBar.visibility = View.VISIBLE
+                    searchBar.isIconified = false
+
                     return@setNavigationItemSelectedListener true
                  }
                 R.id.nav_manage -> {
@@ -123,6 +138,9 @@ class MainActivity : AppCompatActivity() {
 
                     currentFragment = drawerSettingsFragment
                     openFragment(drawerSettingsFragment)
+                    actionbar?.setTitle(R.string.take_a_note)
+                    searchBar.visibility = View.GONE
+                    searchBar.isIconified = true
                     return@setNavigationItemSelectedListener true
                 }
             }
@@ -158,6 +176,7 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             android.R.id.home -> {
                 mDrawerLayout.openDrawer(GravityCompat.START)
+                searchBar.isIconified = true
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -165,7 +184,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
+        if(currentFragment == drawerNotesFragment ){
+            if(drawerNotesFragment.currentFragment == drawerNotesFragment.homeFragment){
+                super.onBackPressed()
+            }
+            else{
+                drawerNotesFragment.currentFragment = drawerNotesFragment.homeFragment
+                drawerNotesFragment.openFragment(drawerNotesFragment.homeFragment, 0)
+            }
+        }
+        else{
+            super.onBackPressed()
+        }
 
 
     }

@@ -5,10 +5,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.constraint.ConstraintLayout
+import android.support.v4.app.NavUtils
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
+import android.view.MenuItem
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
 import android.widget.EditText
@@ -37,6 +39,17 @@ class NoteEditActivity : AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.ic_back)
             setTitle("Note Editor")
 
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            android.R.id.home -> {
+                finish()
+
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
         }
     }
 }
