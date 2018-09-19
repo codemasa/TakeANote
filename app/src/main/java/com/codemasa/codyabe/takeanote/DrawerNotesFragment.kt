@@ -72,8 +72,8 @@ class DrawerNotesFragment : Fragment() {
             false
         }
         var floatingActionButton : FloatingActionButton = view.findViewById(R.id.add_note_button)
-        floatingActionButton.setOnClickListener {view->
-            val intent : Intent = NoteEditActivity.newIntent(view.context)
+        floatingActionButton.setOnClickListener {_->
+            val intent : Intent = NoteEditActivity.newIntent(this.context)
             startActivity(intent)
         }
 
@@ -93,7 +93,7 @@ class DrawerNotesFragment : Fragment() {
 
     private fun openFragment(fragment: Fragment) {
         val transaction = childFragmentManager.beginTransaction()
-        transaction.replace(R.id.bot_nav_container, fragment, fragment.tag)
+        transaction.replace(R.id.notes_layout, fragment, fragment.tag)
         transaction.commit()
     }
 

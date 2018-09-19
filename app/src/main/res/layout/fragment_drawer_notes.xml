@@ -6,21 +6,6 @@
     android:layout_height="match_parent">
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/add_note_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:focusable="true"
-        app:backgroundTint="@color/colorPrimaryDark"
-        app:layout_constraintBottom_toTopOf="@+id/bot_nav_container"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.913"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.95"
-        app:srcCompat="@drawable/ic_add" />
-
     <FrameLayout
         android:id="@+id/bot_nav_container"
         android:layout_width="match_parent"
@@ -39,7 +24,6 @@
             android:layout_height="wrap_content"
             android:background="@color/colorAccent"
             android:foregroundGravity="bottom"
-            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -51,6 +35,31 @@
         </android.support.design.widget.BottomNavigationView>
 
     </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/notes_layout"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+    </FrameLayout>
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_note_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        app:backgroundTint="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toTopOf="@+id/bot_nav_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.913"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.95"
+        app:srcCompat="@drawable/ic_add" />
 
 
 </android.support.constraint.ConstraintLayout>
