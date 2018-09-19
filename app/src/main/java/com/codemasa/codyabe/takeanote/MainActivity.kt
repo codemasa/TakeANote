@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBar
+import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
@@ -21,15 +22,18 @@ class MainActivity : AppCompatActivity() {
     internal lateinit var mDrawerLayout: DrawerLayout
     internal val TAG = MainActivity::class.java.simpleName
     internal lateinit var currentFragment : Fragment
+    internal var currentFragmentID : Int = 0
     internal lateinit var drawerNotesFragment: DrawerNotesFragment
     internal lateinit var drawerProfileFragment: DrawerProfileFragment
     internal lateinit var drawerFavoritesFragment: DrawerFavoritesFragment
     internal lateinit var drawerBacklogFragment: DrawerBacklogFragment
     internal lateinit var drawerSettingsFragment: DrawerSettingsFragment
+    internal lateinit var drawerSearchFragment: DrawerSearchFragment
 
 
     companion object {
         var CURRENT_DRAWER_FRAGMENT_KEY = "CURRENT_DRAWER_FRAGMENT_KEY"
+        var CURRENT_DRAWER_FRAGMENT_ID_KEY = "CURRENT_DRAWER_FRAGMENT_ID_KEY"
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,7 +45,10 @@ class MainActivity : AppCompatActivity() {
         actionbar?.apply {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_menu)
+            setTitle(R.string.take_a_note)
         }
+        val searchBar : SearchView = findViewById(R.id.media_search)
+        searchBar.visibility = View.GONE
         //setting the layout for the drawer layout
         mDrawerLayout = findViewById(R.id.drawer_layout)
 
@@ -50,6 +57,8 @@ class MainActivity : AppCompatActivity() {
         drawerFavoritesFragment = DrawerFavoritesFragment.newInstance()
         drawerBacklogFragment = DrawerBacklogFragment.newInstance()
         drawerSettingsFragment = DrawerSettingsFragment.newInstance()
+        drawerSearchFragment = DrawerSearchFragment.newInstance()
+
 
 
         if(savedInstanceState != null){
@@ -64,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        val navigationView: NavigationView = findViewById(R.id.nav_view)
+        val navigationView: NavigationView = findViewById(R.id.nav_view) as NavigationView
         navigationView.setNavigationItemSelectedListener { menuItem ->
             // set item as selected to persist highlight
             menuItem.isChecked = true
@@ -75,26 +84,43 @@ class MainActivity : AppCompatActivity() {
             // For example, swap UI fragments here
             when (menuItem.itemId){
                 R.id.nav_profile -> {
+                    currentFragmentID = R.id.nav_profile
                     currentFragment = drawerProfileFragment
                     openFragment(drawerProfileFragment)
                     return@setNavigationItemSelectedListener true
                 }
                 R.id.nav_notes -> {
+                    currentFragmentID = R.id.nav_notes
+
                     currentFragment = drawerNotesFragment
                     openFragment(drawerNotesFragment)
                     return@setNavigationItemSelectedListener true
                 }
                 R.id.nav_favories -> {
+                    currentFragmentID = R.id.nav_favories
+
                     currentFragment = drawerFavoritesFragment
                     openFragment(drawerFavoritesFragment)
                     return@setNavigationItemSelectedListener true
                 }
                 R.id.nav_backlog -> {
+                    currentFragmentID = R.id.nav_backlog
+
                     currentFragment = drawerBacklogFragment
                     openFragment(drawerBacklogFragment)
                     return@setNavigationItemSelectedListener true
                 }
+                R.id.nav_search -> {
+                    currentFragmentID = R.id.nav_search
+
+                    currentFragment = drawerSearchFragment
+                    openFragment(drawerSearchFragment)
+                    
+                    return@setNavigationItemSelectedListener true
+                 }
                 R.id.nav_manage -> {
+                    currentFragmentID = R.id.nav_manage
+
                     currentFragment = drawerSettingsFragment
                     openFragment(drawerSettingsFragment)
                     return@setNavigationItemSelectedListener true
@@ -126,6 +152,7 @@ class MainActivity : AppCompatActivity() {
         )
 
 
+
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -136,7 +163,6 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
 
     override fun onBackPressed() {
         super.onBackPressed()

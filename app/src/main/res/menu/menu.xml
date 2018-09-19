@@ -20,6 +20,10 @@
             android:icon="@drawable/ic_backlog"
             android:title="@string/backlog" />
         <item
+            android:id="@+id/nav_search"
+            android:icon="@drawable/ic_search"
+            android:title="@string/search" />
+        <item
             android:id="@+id/nav_manage"
             android:icon="@android:drawable/ic_menu_manage"
             android:title="@string/tools" />

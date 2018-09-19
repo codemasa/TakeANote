@@ -16,5 +16,8 @@
     <string name="drawer_header">Take a Note</string>
     <string name="theme">Theme</string>
     <string name="note_edit">Note Edit</string>
+    <string name="save">Save</string>
+    <string name="search">Search</string>
+    <string name="take_a_note">Take a Note</string>
 
 </resources>
