@@ -158,7 +158,7 @@ class MainActivity : AppCompatActivity() {
 
                     override fun onDrawerOpened(drawerView: View) {
                         val drawerName : TextView = findViewById(R.id.drawer_name)
-                        drawerName.text  = getString(R.string.drawer_name_text, "Cody Abe")
+                        drawerName.text  = getString(R.string.take_a_note)
                         val drawerHeader : TextView = findViewById(R.id.drawer_header)
                         drawerHeader.text = getString(R.string.drawer_header_text)
                         val drawerHeaderSecondary : TextView = findViewById(R.id.drawer_header_secondary)
