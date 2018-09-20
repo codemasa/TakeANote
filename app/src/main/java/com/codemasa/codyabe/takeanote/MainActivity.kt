@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import java.lang.reflect.Field
 
 class MainActivity : AppCompatActivity() {
@@ -156,6 +157,12 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     override fun onDrawerOpened(drawerView: View) {
+                        val drawerName : TextView = findViewById(R.id.drawer_name)
+                        drawerName.text  = getString(R.string.drawer_name_text, "Cody Abe")
+                        val drawerHeader : TextView = findViewById(R.id.drawer_header)
+                        drawerHeader.text = getString(R.string.drawer_header_text)
+                        val drawerHeaderSecondary : TextView = findViewById(R.id.drawer_header_secondary)
+                        drawerHeaderSecondary.text = "1"
                         // Respond when the drawer is opened
                     }
 

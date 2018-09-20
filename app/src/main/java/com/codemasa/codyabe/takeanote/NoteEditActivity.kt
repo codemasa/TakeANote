@@ -4,13 +4,18 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
+import android.renderscript.ScriptGroup
 import android.support.constraint.ConstraintLayout
+import android.support.design.widget.TextInputEditText
+import android.support.design.widget.TextInputLayout
 import android.support.v4.app.NavUtils
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
+import android.text.method.Touch
 import android.view.MenuItem
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
 import android.widget.EditText
@@ -18,6 +23,7 @@ import android.widget.EditText
 
 
 class NoteEditActivity : AppCompatActivity() {
+    internal lateinit var textInput : TextInputLayout
     companion object {
 
         fun newIntent(context: Context): Intent {
@@ -40,10 +46,13 @@ class NoteEditActivity : AppCompatActivity() {
             setTitle("Note Editor")
 
         }
+        textInput = findViewById(R.id.title_input)
+        textInput.isActivated = true
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId) {
+        when(item.itemId) {
             android.R.id.home -> {
                 finish()
 
@@ -51,5 +60,11 @@ class NoteEditActivity : AppCompatActivity() {
             }
             else -> return super.onOptionsItemSelected(item)
         }
+    }
+
+    fun hideKeyboard(view: View){
+        val inputMethodManager : InputMethodManager = getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromInputMethod(view.windowToken, 0)
+
     }
 }

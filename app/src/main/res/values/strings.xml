@@ -13,11 +13,22 @@
     <string name="profile">Profile</string>
     <string name="favorites">Favorites</string>
     <string name="backlog">Backlog</string>
-    <string name="drawer_header">Take a Note</string>
+    <string name="drawer_header_text">Notes in Library: </string>
     <string name="theme">Theme</string>
     <string name="note_edit">Note Edit</string>
     <string name="save">Save</string>
     <string name="search">Search</string>
     <string name="take_a_note">Take a Note</string>
+    <string name="title_note_add_hint">Title</string>
+    <string name="music_category">Album</string>
+    <string name="tv_category">TV Show</string>
+    <string name="movie_category">Movie</string>
+    <string name="drawer_name_text">%s</string>
+    <string name="drawer_header_secondary_text">%s</string>
+    <string-array name="category_array">
+        <item>@string/movie_category</item>
+        <item>@string/tv_category</item>
+        <item>@string/music_category</item>
+    </string-array>
 
 </resources>
