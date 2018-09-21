@@ -48,4 +48,27 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
 
     }
 
+    fun readMovies() : MutableList<Movie>{
+        var list : MutableList<Movie> = ArrayList()
+        val db = this.readableDatabase
+        val query = "SELECT * FROM "  + MOVIE_TABLE
+        val result = db.rawQuery(query, null)
+        if(result.moveToFirst()) {
+            do{
+                var movie = Movie()
+                movie.id = result.getString(result.getColumnIndex(COL_ID)).toInt()
+                movie.title = result.getString(result.getColumnIndex(COL_TITLE))
+                movie.director = result.getString(result.getColumnIndex(COL_DIRECTOR))
+                movie.releaseDate = result.getString(result.getColumnIndex(COL_RELEASE_DATE)).toInt()
+                list.add(movie)
+
+            }while (result.moveToNext())
+        }
+        result.close()
+        db.close()
+
+        return list
+    }
+
+
 }
