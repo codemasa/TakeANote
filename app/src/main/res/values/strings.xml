@@ -27,6 +27,7 @@
     <string name="drawer_header_secondary_text">%s</string>
     <string name="director_input">Director</string>
     <string name="date_input">Release Year</string>
+    <string name="fill_message">Please Fill in All fields!</string>
     <string-array name="category_array">
         <item>@string/movie_category</item>
         <item>@string/tv_category</item>

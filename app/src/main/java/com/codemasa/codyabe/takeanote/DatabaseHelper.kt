@@ -21,13 +21,13 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         var createTable = "CREATE TABLE "  +  MOVIE_TABLE + " (" +
                 COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_TITLE + " VARCHAR(256), " +
-                COL_DIRECTOR + "VARCHAR(256), " +
-                COL_RELEASE_DATE + "INTEGER)"
+                COL_DIRECTOR + " VARCHAR(256), " +
+                COL_RELEASE_DATE + " INTEGER);"
 
         db?.execSQL(createTable)
     }
 
-    override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
+    override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -42,7 +42,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
             Toast.makeText(context,"Failed", Toast.LENGTH_SHORT).show()
         }
         else {
-            Toast.makeText(context,"Success", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,"Saved", Toast.LENGTH_SHORT).show()
 
         }
 
