@@ -70,5 +70,29 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         return list
     }
 
+    fun deleteMovie() {
+        val db = this.writableDatabase
+
+        db.delete(MOVIE_TABLE, COL_ID+"=?", arrayOf(1.toString()))
+    }
+
+    fun updateMovies(title: String?, director: String?, year: Int?){
+        val db = this.writableDatabase
+        val query = "SELECT * FROM "  + MOVIE_TABLE
+        val result = db.rawQuery(query, null)
+        if(result.moveToFirst()) {
+            do{
+                val cv = ContentValues()
+                cv.put(COL_TITLE, if(title.isNullOrBlank()) title  else result.getString(result.getColumnIndex(COL_TITLE)))
+                cv.put(COL_DIRECTOR, if(director.isNullOrBlank()) director  else result.getString(result.getColumnIndex(COL_DIRECTOR)))
+                cv.put(COL_RELEASE_DATE, if(year != null) year  else result.getInt(result.getColumnIndex(COL_RELEASE_DATE)))
+                db.update(MOVIE_TABLE, cv, COL_ID+"=?", arrayOf(result.getString(result.getColumnIndex(COL_ID))))
+
+            }while (result.moveToNext())
+        }
+        result.close()
+        db.close()
+    }
+
 
 }

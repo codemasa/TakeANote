@@ -1,13 +1,11 @@
 package com.codemasa.codyabe.takeanote
 
 import android.content.Context
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.*
+import android.widget.*
 import com.squareup.picasso.Picasso
+
+
 
 class AdapterMovie(private val context: Context,
                    private val dataSource: ArrayList<Movie>) : BaseAdapter(){
@@ -37,11 +35,33 @@ class AdapterMovie(private val context: Context,
 
         val movie : Movie = getItem(position) as Movie
 
+        val rearrangeButton : Button
+        rearrangeButton = rowView.findViewById(R.id.rearrange_button)
+        rearrangeButton.setOnClickListener {
+            Toast.makeText(context, "Ready to rearrange", Toast.LENGTH_LONG).show()
+
+            true
+        }
+        rearrangeButton.setOnDragListener { view, dragEvent ->
+
+            true
+        }
+
+        val vertMoreButton : Button
+        vertMoreButton = rowView.findViewById(R.id.more_options_button)
+
+        vertMoreButton.setOnClickListener {
+            Toast.makeText(context, "More Options", Toast.LENGTH_LONG).show()
+        }
+
         titleTextView.text = movie.title
         directorTextView.text = movie.director
         yearTextView.text = movie.releaseDate.toString()
 
         Picasso.get().load("replace").placeholder(R.mipmap.ic_launcher).into(thumbnail)
+
+
+
         return rowView
     }
 

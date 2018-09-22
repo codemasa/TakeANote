@@ -29,6 +29,8 @@
     <string name="date_input">Release Year</string>
     <string name="fill_message">Please Fill in All fields!</string>
     <string name="thumbnail">thumbnail</string>
+    <string name="edit">Edit</string>
+    <string name="done">Done</string>
     <string-array name="category_array">
         <item>@string/movie_category</item>
         <item>@string/tv_category</item>

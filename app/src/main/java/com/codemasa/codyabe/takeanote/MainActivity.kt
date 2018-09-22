@@ -15,6 +15,8 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
+import android.widget.ListView
 import android.widget.TextView
 import java.lang.reflect.Field
 
@@ -31,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     internal lateinit var drawerSettingsFragment: DrawerSettingsFragment
     internal lateinit var drawerSearchFragment: DrawerSearchFragment
     internal lateinit var searchBar : SearchView
-
+    internal lateinit var editButton : Button
 
     companion object {
         var CURRENT_DRAWER_FRAGMENT_KEY = "CURRENT_DRAWER_FRAGMENT_KEY"
@@ -51,6 +53,10 @@ class MainActivity : AppCompatActivity() {
         }
         searchBar = findViewById(R.id.media_search)
         searchBar.visibility = View.GONE
+
+        editButton = findViewById(R.id.list_edit_button)
+        editButton.visibility = View.VISIBLE
+
         //setting the layout for the drawer layout
         mDrawerLayout = findViewById(R.id.drawer_layout)
 
@@ -63,6 +69,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
         if(savedInstanceState != null){
             currentFragment = supportFragmentManager.getFragment(savedInstanceState, CURRENT_DRAWER_FRAGMENT_KEY)
             openFragment(currentFragment)
@@ -71,9 +78,6 @@ class MainActivity : AppCompatActivity() {
             currentFragment = drawerNotesFragment
             openFragment(drawerNotesFragment)
         }
-
-
-
 
         val navigationView: NavigationView = findViewById(R.id.nav_view) as NavigationView
         navigationView.setNavigationItemSelectedListener { menuItem ->
@@ -92,6 +96,7 @@ class MainActivity : AppCompatActivity() {
                     actionbar?.setTitle(R.string.take_a_note)
                     searchBar.visibility = View.GONE
                     searchBar.isIconified = true
+                    editButton.visibility = View.GONE
                     return@setNavigationItemSelectedListener true
                 }
                 R.id.nav_notes -> {
@@ -102,6 +107,7 @@ class MainActivity : AppCompatActivity() {
                     actionbar?.setTitle(R.string.take_a_note)
                     searchBar.visibility = View.GONE
                     searchBar.isIconified = true
+                    editButton.visibility = View.VISIBLE
                     return@setNavigationItemSelectedListener true
                 }
                 R.id.nav_favories -> {
@@ -112,6 +118,8 @@ class MainActivity : AppCompatActivity() {
                     actionbar?.setTitle(R.string.take_a_note)
                     searchBar.visibility = View.GONE
                     searchBar.isIconified = true
+                    editButton.visibility = View.GONE
+
                     return@setNavigationItemSelectedListener true
                 }
                 R.id.nav_backlog -> {
@@ -122,6 +130,8 @@ class MainActivity : AppCompatActivity() {
                     actionbar?.setTitle(R.string.take_a_note)
                     searchBar.visibility = View.GONE
                     searchBar.isIconified = true
+                    editButton.visibility = View.GONE
+
                     return@setNavigationItemSelectedListener true
                 }
                 R.id.nav_search -> {
@@ -131,6 +141,7 @@ class MainActivity : AppCompatActivity() {
                     actionbar?.title = ""
                     searchBar.visibility = View.VISIBLE
                     searchBar.isIconified = false
+                    editButton.visibility = View.GONE
 
                     return@setNavigationItemSelectedListener true
                  }
@@ -142,6 +153,8 @@ class MainActivity : AppCompatActivity() {
                     actionbar?.setTitle(R.string.take_a_note)
                     searchBar.visibility = View.GONE
                     searchBar.isIconified = true
+                    editButton.visibility = View.GONE
+
                     return@setNavigationItemSelectedListener true
                 }
             }

@@ -11,6 +11,10 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ListView
+import android.widget.RelativeLayout
+import android.widget.ToggleButton
 
 class DrawerNotesFragment : Fragment() {
     internal lateinit var mBottomNav: BottomNavigationView
@@ -21,6 +25,8 @@ class DrawerNotesFragment : Fragment() {
     internal lateinit var musicFragment: MusicFragment
     internal lateinit var tvFragment: TVFragment
 
+
+
     companion object {
         private val CURRENT_FRAGMENT_KEY = "CURRENT_FRAGMENT_KEY"
         private val CURRENT_NAV_ID = "CURRENT_NAV_ID"
@@ -28,14 +34,12 @@ class DrawerNotesFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        var view = inflater.inflate(R.layout.fragment_drawer_notes, container, false)
+        val view = inflater.inflate(R.layout.fragment_drawer_notes, container, false)
         mBottomNav = view.findViewById(R.id.entertainment_category)
         homeFragment = HomeFragment.newInstance()
         moviesFragment = MoviesFragment.newInstance()
         musicFragment = MusicFragment.newInstance()
         tvFragment = TVFragment.newInstance()
-
-
 
 
         if (savedInstanceState != null) {
@@ -46,6 +50,7 @@ class DrawerNotesFragment : Fragment() {
             currentFragment = homeFragment
             openFragment(homeFragment, null)
         }
+
         mBottomNav.setOnNavigationItemSelectedListener { item ->
             item.isChecked = true
             when (item.itemId) {

@@ -33,6 +33,7 @@ class NoteEditActivity : AppCompatActivity() {
     internal lateinit var yearInputText : AppCompatEditText
     internal lateinit var categorySpinner : AppCompatSpinner
     internal lateinit var saveButton: Button
+
     companion object {
 
         fun newIntent(context: Context): Intent {
