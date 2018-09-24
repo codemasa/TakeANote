@@ -1,6 +1,7 @@
 package com.codemasa.codyabe.takeanote
 
 import android.content.Context
+import android.util.Log
 import android.view.*
 import android.widget.*
 import com.squareup.picasso.Picasso
@@ -52,7 +53,9 @@ class AdapterMovie(private val context: Context,
 
         vertMoreButton.setOnClickListener {
             Toast.makeText(context, "More Options", Toast.LENGTH_LONG).show()
+            showMoreOptionsMenu(it)
         }
+
 
         titleTextView.text = movie.title
         directorTextView.text = movie.director
@@ -63,6 +66,42 @@ class AdapterMovie(private val context: Context,
 
 
         return rowView
+    }
+
+    fun showMoreOptionsMenu(view : View){
+        val moreOptionsMenu : PopupMenu = PopupMenu(context, view)
+
+        moreOptionsMenu.setOnMenuItemClickListener{item ->
+            when(item.itemId) {
+                R.id.popup_delete -> {
+                    Toast.makeText(context, "Delete", Toast.LENGTH_LONG).show()
+                    true
+                }
+                R.id.popup_edit -> {
+                    true
+                }
+                R.id.popup_share-> {
+                    true
+                }
+                else -> false
+            }
+        }
+
+        moreOptionsMenu.inflate(R.menu.more_options_menu)
+
+        try {
+            val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
+            fieldMPopup.isAccessible = true
+            val mPopup = fieldMPopup.get(moreOptionsMenu)
+            mPopup.javaClass
+                    .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                    .invoke(mPopup,true)
+        }catch (e: Exception){
+            Log.e("Main", "Error showing menu icons.",e)
+        } finally {
+            moreOptionsMenu.show()
+        }
+
     }
 
 

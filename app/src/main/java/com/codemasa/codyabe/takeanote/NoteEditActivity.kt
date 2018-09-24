@@ -16,6 +16,7 @@ import android.support.v7.widget.AppCompatSpinner
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.text.method.Touch
+import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -107,6 +108,7 @@ class NoteEditActivity : AppCompatActivity() {
             else -> return super.onOptionsItemSelected(item)
         }
     }
+
 
     fun hideKeyboard(view: View){
         val inputMethodManager : InputMethodManager = getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager

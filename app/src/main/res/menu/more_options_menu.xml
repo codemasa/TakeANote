@@ -4,14 +4,20 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/t1"
-            android:title="@string/profile" />
+            android:id="@+id/popup_delete"
+            android:checkable="false"
+            android:icon="@drawable/ic_delete"
+            android:title="@string/delete" />
         <item
-            android:id="@+id/t2"
-            android:title="@string/notes" />
+            android:id="@+id/popup_edit"
+            android:checkable="false"
+            android:icon="@drawable/ic_edit"
+            android:title="@string/edit" />
         <item
-            android:id="@+id/t3"
-            android:title="@string/favorites" />
+            android:id="@+id/popup_share"
+            android:checkable="false"
+            android:icon="@drawable/ic_share"
+            android:title="@string/share" />
 
     </group>
 

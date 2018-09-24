@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBar
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.util.Log
+import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
@@ -33,8 +34,6 @@ class MainActivity : AppCompatActivity() {
     internal lateinit var drawerSettingsFragment: DrawerSettingsFragment
     internal lateinit var drawerSearchFragment: DrawerSearchFragment
     internal lateinit var searchBar : SearchView
-    internal lateinit var editButton : Button
-
     companion object {
         var CURRENT_DRAWER_FRAGMENT_KEY = "CURRENT_DRAWER_FRAGMENT_KEY"
         var CURRENT_DRAWER_FRAGMENT_ID_KEY = "CURRENT_DRAWER_FRAGMENT_ID_KEY"
@@ -54,8 +53,7 @@ class MainActivity : AppCompatActivity() {
         searchBar = findViewById(R.id.media_search)
         searchBar.visibility = View.GONE
 
-        editButton = findViewById(R.id.list_edit_button)
-        editButton.visibility = View.VISIBLE
+
 
         //setting the layout for the drawer layout
         mDrawerLayout = findViewById(R.id.drawer_layout)
@@ -96,7 +94,6 @@ class MainActivity : AppCompatActivity() {
                     actionbar?.setTitle(R.string.take_a_note)
                     searchBar.visibility = View.GONE
                     searchBar.isIconified = true
-                    editButton.visibility = View.GONE
                     return@setNavigationItemSelectedListener true
                 }
                 R.id.nav_notes -> {
@@ -107,7 +104,6 @@ class MainActivity : AppCompatActivity() {
                     actionbar?.setTitle(R.string.take_a_note)
                     searchBar.visibility = View.GONE
                     searchBar.isIconified = true
-                    editButton.visibility = View.VISIBLE
                     return@setNavigationItemSelectedListener true
                 }
                 R.id.nav_favories -> {
@@ -118,7 +114,6 @@ class MainActivity : AppCompatActivity() {
                     actionbar?.setTitle(R.string.take_a_note)
                     searchBar.visibility = View.GONE
                     searchBar.isIconified = true
-                    editButton.visibility = View.GONE
 
                     return@setNavigationItemSelectedListener true
                 }
@@ -130,7 +125,6 @@ class MainActivity : AppCompatActivity() {
                     actionbar?.setTitle(R.string.take_a_note)
                     searchBar.visibility = View.GONE
                     searchBar.isIconified = true
-                    editButton.visibility = View.GONE
 
                     return@setNavigationItemSelectedListener true
                 }
@@ -141,7 +135,6 @@ class MainActivity : AppCompatActivity() {
                     actionbar?.title = ""
                     searchBar.visibility = View.VISIBLE
                     searchBar.isIconified = false
-                    editButton.visibility = View.GONE
 
                     return@setNavigationItemSelectedListener true
                  }
@@ -153,7 +146,6 @@ class MainActivity : AppCompatActivity() {
                     actionbar?.setTitle(R.string.take_a_note)
                     searchBar.visibility = View.GONE
                     searchBar.isIconified = true
-                    editButton.visibility = View.GONE
 
                     return@setNavigationItemSelectedListener true
                 }
@@ -218,6 +210,19 @@ class MainActivity : AppCompatActivity() {
         }
 
 
+    }
+
+
+    override fun onContextItemSelected(item: MenuItem): Boolean {
+        closeContextMenu()
+
+        when(item.itemId) {
+            1 -> {
+                true
+            }
+        }
+
+        return false
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
