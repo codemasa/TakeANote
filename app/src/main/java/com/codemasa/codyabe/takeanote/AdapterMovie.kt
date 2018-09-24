@@ -1,15 +1,30 @@
 package com.codemasa.codyabe.takeanote
 
 import android.content.Context
+import android.content.Intent
+import android.os.AsyncTask
+import android.os.Build
+import android.provider.ContactsContract
+import android.support.annotation.UiThread
+import android.support.v4.content.ContextCompat.startActivity
+import android.util.JsonReader
 import android.util.Log
 import android.view.*
 import android.widget.*
+import com.android.volley.Request
+import com.android.volley.RequestQueue
+import com.android.volley.Response
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.squareup.picasso.Picasso
-
+import org.json.*
+import java.net.URL
 
 
 class AdapterMovie(private val context: Context,
                    private val dataSource: ArrayList<Movie>) : BaseAdapter(){
+
+    internal lateinit var requestQueue : RequestQueue
 
     private val inflater: LayoutInflater
             = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -53,34 +68,58 @@ class AdapterMovie(private val context: Context,
 
         vertMoreButton.setOnClickListener {
             Toast.makeText(context, "More Options", Toast.LENGTH_LONG).show()
-            showMoreOptionsMenu(it)
+            showMoreOptionsMenu(it,movie)
         }
 
 
         titleTextView.text = movie.title
         directorTextView.text = movie.director
         yearTextView.text = movie.releaseDate.toString()
+        val APIKey = BuildConfig.ApiKey
+        val imdbURL = "http://omdbapi.com/?t=" + movie.title +"&apikey=" + APIKey
+        var APIResponse : String = ""
+        requestQueue = Volley.newRequestQueue(context)
+        val APIRequest = JsonObjectRequest(Request.Method.GET, imdbURL, null,
+                Response.Listener {response ->  
+                    APIResponse = response.getString("imdbID")
+                    Picasso.get().load("http://img.omdbapi.com/?i=" + APIResponse +"&h=600&apikey=" + APIKey).into(thumbnail)
 
-        Picasso.get().load("replace").placeholder(R.mipmap.ic_launcher).into(thumbnail)
+                },
+                Response.ErrorListener {error ->
+
+                }
+        )
+        requestQueue.add(APIRequest)
 
 
 
         return rowView
     }
 
-    fun showMoreOptionsMenu(view : View){
+    fun showMoreOptionsMenu(view : View, movie:Movie){
         val moreOptionsMenu : PopupMenu = PopupMenu(context, view)
 
         moreOptionsMenu.setOnMenuItemClickListener{item ->
+            val db = DatabaseHelper(context)
             when(item.itemId) {
                 R.id.popup_delete -> {
                     Toast.makeText(context, "Delete", Toast.LENGTH_LONG).show()
+                    db.deleteMovie(movie.id)
                     true
                 }
                 R.id.popup_edit -> {
+                    val intent = NoteEditActivity.newIntent(context)
+                    intent.putExtra("title", movie.title)
+                    intent.putExtra("director", movie.director)
+                    intent.putExtra("year", movie.releaseDate)
+                    intent.putExtra("type", "edit")
+                    context.startActivity(intent)
+
+
                     true
                 }
                 R.id.popup_share-> {
+
                     true
                 }
                 else -> false

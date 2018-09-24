@@ -41,6 +41,10 @@ class NoteEditActivity : AppCompatActivity() {
             val intent = Intent(context, NoteEditActivity::class.java)
             return intent
         }
+
+        var TITLE_KEY = ""
+        var DIRECTOR_KEY = ""
+        var YEAR_KEY = ""
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,24 +63,39 @@ class NoteEditActivity : AppCompatActivity() {
         titleInputText = findViewById(R.id.title_input_text)
         directorInputText = findViewById(R.id.director_input_text)
         yearInputText = findViewById(R.id.date_input_text)
-        categorySpinner = findViewById(R.id.category_spinner)
+        categorySpinner = findViewById<AppCompatSpinner>(R.id.category_spinner)
 
 
 
 
         val context = this
+
+        val intent = intent
+        if (intent.getStringExtra("type") == "edit"){
+            titleInputText.setText(intent.getStringExtra("title"))
+            directorInputText.setText(intent.getStringExtra("director"))
+            yearInputText.setText(intent.getIntExtra("year",0).toString())
+
+        }
+
         saveButton = findViewById(R.id.save_button);
         saveButton.setOnClickListener{ view ->
             if(titleInputText.text.isNotBlank()&&
                      directorInputText.text.isNotBlank() &&
                      yearInputText.text.isNotBlank()){
-                var category = categorySpinner.selectedItem.toString()
+                val category = categorySpinner.selectedItem.toString()
                 if (yearInputText.text.toString().toIntOrNull() != null){
                     when (category) {
                         getString(R.string.movie_category) -> {
-                            var movie = Movie(titleInputText.text.toString(), directorInputText.text.toString(), yearInputText.text.toString().toInt())
-                            var db = DatabaseHelper(context)
-                            db.insertData(movie)
+                            val db = DatabaseHelper(context)
+                            val movie = Movie(titleInputText.text.toString(), directorInputText.text.toString(), yearInputText.text.toString().toInt())
+                            if(intent.getStringExtra("type") == "edit") {
+                                db.updateMovies(movie.title, movie.director, movie.releaseDate)
+                            }
+                            else{
+                                db.insertData(movie)
+                            }
+
                             finish()
                         }
                         getString(R.string.tv_category) -> {

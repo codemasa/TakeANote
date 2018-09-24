@@ -70,10 +70,11 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         return list
     }
 
-    fun deleteMovie() {
+    fun deleteMovie(id : Int) {
         val db = this.writableDatabase
 
-        db.delete(MOVIE_TABLE, COL_ID+"=?", arrayOf(1.toString()))
+        db.delete(MOVIE_TABLE, COL_ID+"=?", arrayOf(id.toString()))
+        db.close()
     }
 
     fun updateMovies(title: String?, director: String?, year: Int?){
@@ -92,6 +93,19 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         }
         result.close()
         db.close()
+    }
+
+    fun findMovie(movie : Movie) : Boolean{
+        val db = this.readableDatabase
+        val query = "SELECT * FROM %s WHERE title = \"%s\" AND director = \"%s\"".format(MOVIE_TABLE, movie.title, movie.director)
+        val result = db.rawQuery(query, null)
+        if (result != null) {
+            result.close()
+            db.close()
+            return true
+        }
+        db.close()
+        return false
     }
 
 

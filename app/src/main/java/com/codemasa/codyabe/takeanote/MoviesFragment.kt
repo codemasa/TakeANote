@@ -22,6 +22,10 @@ class MoviesFragment : Fragment() {
         return view
     }
 
+    override fun onResume() {
+        super.onResume()
+        movieListView.refreshDrawableState()
+    }
     companion object {
         fun newInstance(): MoviesFragment = MoviesFragment()
     }

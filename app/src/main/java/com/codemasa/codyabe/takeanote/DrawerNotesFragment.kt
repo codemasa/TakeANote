@@ -80,6 +80,7 @@ class DrawerNotesFragment : Fragment() {
         var floatingActionButton : FloatingActionButton = view.findViewById(R.id.add_note_button)
         floatingActionButton.setOnClickListener {_->
             val intent : Intent = NoteEditActivity.newIntent(this.context)
+            intent.putExtra("type", "new")
             startActivity(intent)
         }
 
