@@ -33,6 +33,7 @@
     <string name="done">Done</string>
     <string name="delete">Delete</string>
     <string name="share">Share</string>
+    <string name="artist">Artist</string>
     <string-array name="category_array">
         <item>@string/movie_category</item>
         <item>@string/tv_category</item>

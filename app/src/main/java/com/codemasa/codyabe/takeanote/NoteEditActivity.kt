@@ -21,10 +21,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import kotlinx.android.synthetic.main.activity_note_edit.*
 
 
@@ -60,12 +57,36 @@ class NoteEditActivity : AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.ic_back)
             setTitle("Note Editor")
         }
+
+
         titleInputText = findViewById(R.id.title_input_text)
         directorInputText = findViewById(R.id.director_input_text)
         yearInputText = findViewById(R.id.date_input_text)
         categorySpinner = findViewById<AppCompatSpinner>(R.id.category_spinner)
 
 
+        categorySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val category = categorySpinner.selectedItem.toString()
+                when(category) {
+                    getString(R.string.movie_category) -> {
+                        directorInputText.visibility = View.VISIBLE
+                        directorInputText.setHint(getString(R.string.director_input))
+                    }
+                    getString(R.string.tv_category) -> {
+                        directorInputText.visibility = View.GONE
+                    }
+                    getString(R.string.music_category) -> {
+                        directorInputText.visibility = View.VISIBLE
+                        directorInputText.setHint(getString(R.string.artist))
+                    }
+                }
+            }
+        }
 
 
         val context = this
@@ -79,43 +100,56 @@ class NoteEditActivity : AppCompatActivity() {
         }
 
         saveButton = findViewById(R.id.save_button);
-        saveButton.setOnClickListener{ view ->
-            if(titleInputText.text.isNotBlank()&&
-                     directorInputText.text.isNotBlank() &&
-                     yearInputText.text.isNotBlank()){
-                val category = categorySpinner.selectedItem.toString()
-                if (yearInputText.text.toString().toIntOrNull() != null){
-                    when (category) {
-                        getString(R.string.movie_category) -> {
-                            val db = DatabaseHelper(context)
-                            val movie = Movie(titleInputText.text.toString(), directorInputText.text.toString(), yearInputText.text.toString().toInt())
-                            if(intent.getStringExtra("type") == "edit") {
-                                db.updateMovies(movie.title, movie.director, movie.releaseDate)
-                            }
-                            else{
-                                db.insertData(movie)
-                            }
+        saveButton.setOnClickListener { view ->
 
-                            finish()
+            val category = categorySpinner.selectedItem.toString()
+            when (category) {
+                getString(R.string.movie_category) -> {
+                    if (titleInputText.text.isNotBlank() &&
+                            directorInputText.text.isNotBlank() &&
+                            yearInputText.text.isNotBlank()) {
+                        val db = DatabaseHelper(context)
+                        val movie = Movie(titleInputText.text.toString(), directorInputText.text.toString(), yearInputText.text.toString().toInt())
+                        if (intent.getStringExtra("type") == "edit") {
+                            db.updateMovies(movie.title, movie.director, movie.releaseDate)
+                        } else {
+                            db.insertData(movie)
                         }
-                        getString(R.string.tv_category) -> {
 
-                        }
-                        getString(R.string.music_category) -> {
-
-                        }
+                        finish()
                     }
-
-
                 }
-
-            }
-            else{
-                 Toast.makeText(context, getString(R.string.fill_message), Toast.LENGTH_LONG)
+                getString(R.string.tv_category) -> {
+                    if (titleInputText.text.isNotBlank() &&
+                            yearInputText.text.isNotBlank()) {
+                        val db = DatabaseHelper(context)
+                        val tvShow = TVShow(titleInputText.text.toString(), yearInputText.text.toString().toInt())
+                        if (intent.getStringExtra("type") == "edit") {
+                            db.updateTVShow(tvShow.title, tvShow.releaseDate)
+                        } else {
+                            db.insertData(tvShow)
+                        }
+                        finish()
+                    }
+                }
+                getString(R.string.music_category) -> {
+                    if (titleInputText.text.isNotBlank() &&
+                            directorInputText.text.isNotBlank() &&
+                            yearInputText.text.isNotBlank()) {
+                        val db = DatabaseHelper(context)
+                        val album = Album(titleInputText.text.toString(), directorInputText.text.toString(), yearInputText.text.toString().toInt())
+                        if (intent.getStringExtra("type") == "edit") {
+                            db.updateAlbum(album.title, album.artist, album.releaseDate)
+                        } else {
+                            db.insertData(album)
+                        }
+                        finish()
+                    }
+                }
             }
         }
-
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId) {

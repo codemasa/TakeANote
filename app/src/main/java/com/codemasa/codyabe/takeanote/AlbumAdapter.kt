@@ -1,13 +1,6 @@
 package com.codemasa.codyabe.takeanote
 
 import android.content.Context
-import android.content.Intent
-import android.os.AsyncTask
-import android.os.Build
-import android.provider.ContactsContract
-import android.support.annotation.UiThread
-import android.support.v4.content.ContextCompat.startActivity
-import android.util.JsonReader
 import android.util.Log
 import android.view.*
 import android.widget.*
@@ -17,11 +10,9 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.squareup.picasso.Picasso
-import org.json.*
-import java.net.URL
 
 
-class AdapterMovie(private val context: Context,
+class AlbumAdapter(private val context: Context,
                    private val dataSource: ArrayList<Movie>) : BaseAdapter(){
 
     internal lateinit var requestQueue : RequestQueue
@@ -42,7 +33,7 @@ class AdapterMovie(private val context: Context,
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val rowView = inflater.inflate(R.layout.list_item_fragment, parent, false)
+        val rowView = inflater.inflate(R.layout.list_item_fragment_album, parent, false)
 
         val titleTextView : TextView = rowView.findViewById(R.id.category_list_title)
         val directorTextView : TextView = rowView.findViewById(R.id.category_list_subtitle)

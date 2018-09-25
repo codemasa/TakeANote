@@ -14,7 +14,7 @@ class MoviesFragment : Fragment() {
         movieListView = view.findViewById<ListView>(R.id.movie_display_list)
         val db = DatabaseHelper(context)
         var data = db.readMovies()
-        var dataList : AdapterMovie = AdapterMovie(context, data as ArrayList<Movie>)
+        var dataList : MovieAdapter = MovieAdapter(context, data as ArrayList<Movie>)
         movieListView.adapter = dataList
 
 

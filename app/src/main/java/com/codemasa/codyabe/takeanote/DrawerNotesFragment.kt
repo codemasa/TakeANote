@@ -2,19 +2,13 @@ package com.codemasa.codyabe.takeanote
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Debug
 import android.support.design.widget.BottomNavigationView
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ListView
-import android.widget.RelativeLayout
-import android.widget.ToggleButton
 
 class DrawerNotesFragment : Fragment() {
     internal lateinit var mBottomNav: BottomNavigationView
@@ -22,8 +16,8 @@ class DrawerNotesFragment : Fragment() {
     internal lateinit var currentFragment: Fragment
     internal lateinit var homeFragment: HomeFragment
     internal lateinit var moviesFragment: MoviesFragment
-    internal lateinit var musicFragment: MusicFragment
-    internal lateinit var tvFragment: TVFragment
+    internal lateinit var albumFragment: AlbumFragment
+    internal lateinit var tvShowFragment: TVShowFragment
 
 
 
@@ -38,8 +32,8 @@ class DrawerNotesFragment : Fragment() {
         mBottomNav = view.findViewById(R.id.entertainment_category)
         homeFragment = HomeFragment.newInstance()
         moviesFragment = MoviesFragment.newInstance()
-        musicFragment = MusicFragment.newInstance()
-        tvFragment = TVFragment.newInstance()
+        albumFragment = AlbumFragment.newInstance()
+        tvShowFragment = TVShowFragment.newInstance()
 
 
         if (savedInstanceState != null) {
@@ -65,13 +59,13 @@ class DrawerNotesFragment : Fragment() {
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.tv_nav_tab -> {
-                    currentFragment = tvFragment
-                    openFragment(tvFragment,null)
+                    currentFragment = tvShowFragment
+                    openFragment(tvShowFragment,null)
                     return@setOnNavigationItemSelectedListener true
                 }
                 R.id.music_nav_tab -> {
-                    currentFragment = musicFragment
-                    openFragment(musicFragment,null)
+                    currentFragment = albumFragment
+                    openFragment(albumFragment,null)
                     return@setOnNavigationItemSelectedListener true
                 }
             }
