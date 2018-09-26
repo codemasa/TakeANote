@@ -63,11 +63,11 @@ class DrawerNotesFragment : Fragment() {
                     openFragment(tvShowFragment,null)
                     return@setOnNavigationItemSelectedListener true
                 }
-                R.id.music_nav_tab -> {
-                    currentFragment = albumFragment
-                    openFragment(albumFragment,null)
-                    return@setOnNavigationItemSelectedListener true
-                }
+//                R.id.music_nav_tab -> {
+//                    currentFragment = albumFragment
+//                    openFragment(albumFragment,null)
+//                    return@setOnNavigationItemSelectedListener true
+//                }
             }
             false
         }

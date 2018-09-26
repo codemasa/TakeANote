@@ -37,7 +37,7 @@
     <string-array name="category_array">
         <item>@string/movie_category</item>
         <item>@string/tv_category</item>
-        <item>@string/music_category</item>
+        <!--<item>@string/music_category</item>-->
     </string-array>
 
 </resources>
