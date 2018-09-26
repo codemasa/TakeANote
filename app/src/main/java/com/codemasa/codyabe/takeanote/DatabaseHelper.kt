@@ -21,6 +21,7 @@ val COL_TITLE = "title"
 val COL_DIRECTOR = "director"
 val COL_ARTIST = "artist"
 val COL_RELEASE_DATE = "date"
+val COL_SEASON = "season"
 
 class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
 
@@ -35,6 +36,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         var createTVTable = "CREATE TABLE "  +  TV_TABLE + " (" +
                 COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_TITLE + " VARCHAR(256), " +
+                COL_SEASON + " INTEGER, " +
                 COL_RELEASE_DATE + " INTEGER);"
 
         var createAlbumTable = "CREATE TABLE "  +  ALBUM_TABLE + " (" +
@@ -72,6 +74,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         val db = this.writableDatabase
         var cv = ContentValues()
         cv.put(COL_TITLE, tvShow.title)
+        cv.put(COL_SEASON, tvShow.season)
         cv.put(COL_RELEASE_DATE, tvShow.releaseDate)
         var result = db.insert(TV_TABLE, null, cv)
         if (result == -1.toLong()) {
@@ -133,6 +136,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
                 var tvShow = TVShow()
                 tvShow.id = result.getString(result.getColumnIndex(COL_ID)).toInt()
                 tvShow.title = result.getString(result.getColumnIndex(COL_TITLE))
+                tvShow.season = result.getString(result.getColumnIndex(COL_SEASON)).toInt()
                 tvShow.releaseDate = result.getString(result.getColumnIndex(COL_RELEASE_DATE)).toInt()
                 list.add(tvShow)
 
@@ -206,7 +210,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         db.close()
     }
 
-    fun updateTVShow(title: String?, year: Int?){
+    fun updateTVShow(title: String?, season: Int?, year: Int?){
         val db = this.writableDatabase
         val query = "SELECT * FROM "  + TV_TABLE
         val result = db.rawQuery(query, null)
@@ -214,6 +218,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
             do{
                 val cv = ContentValues()
                 cv.put(COL_TITLE, if(title.isNullOrBlank()) title  else result.getString(result.getColumnIndex(COL_TITLE)))
+                cv.put(COL_SEASON, if(season != null) season  else result.getInt(result.getColumnIndex(COL_SEASON)))
                 cv.put(COL_RELEASE_DATE, if(year != null) year  else result.getInt(result.getColumnIndex(COL_RELEASE_DATE)))
                 db.update(TV_TABLE, cv, COL_ID+"=?", arrayOf(result.getString(result.getColumnIndex(COL_ID))))
 

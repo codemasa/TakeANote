@@ -36,7 +36,7 @@ class TVShowAdapter(private val context: Context,
         val rowView = inflater.inflate(R.layout.list_item_fragment_tv_show, parent, false)
 
         val titleTextView : TextView = rowView.findViewById(R.id.category_list_title)
-        val directorTextView : TextView = rowView.findViewById(R.id.category_list_subtitle)
+        val seasonTextView : TextView = rowView.findViewById(R.id.category_list_subtitle)
         val yearTextView : TextView = rowView.findViewById(R.id.category_list_detail)
         val thumbnail : ImageView = rowView.findViewById(R.id.category_list_thumbnail)
 
@@ -64,6 +64,7 @@ class TVShowAdapter(private val context: Context,
 
 
         titleTextView.text = tvShow.title
+        seasonTextView.text = "Season: " + tvShow.season.toString()
         yearTextView.text = tvShow.releaseDate.toString()
         val APIKey = BuildConfig.ApiKey
         val imdbURL = "http://omdbapi.com/?t=" + tvShow.title +"&apikey=" + APIKey
@@ -100,6 +101,7 @@ class TVShowAdapter(private val context: Context,
                 R.id.popup_edit -> {
                     val intent = NoteEditActivity.newIntent(context)
                     intent.putExtra("title", tvShow.title)
+                    intent.putExtra("director", tvShow.season)
                     intent.putExtra("year", tvShow.releaseDate)
                     intent.putExtra("type", "edit")
                     context.startActivity(intent)

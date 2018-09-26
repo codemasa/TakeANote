@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.AppCompatSpinner
 import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
+import android.text.InputType
 import android.text.method.Touch
 import android.view.ContextMenu
 import android.view.MenuItem
@@ -74,14 +75,15 @@ class NoteEditActivity : AppCompatActivity() {
                 val category = categorySpinner.selectedItem.toString()
                 when(category) {
                     getString(R.string.movie_category) -> {
-                        directorInputText.visibility = View.VISIBLE
+                        directorInputText.inputType = InputType.TYPE_CLASS_TEXT
                         directorInputText.setHint(getString(R.string.director_input))
                     }
                     getString(R.string.tv_category) -> {
-                        directorInputText.visibility = View.GONE
+                        directorInputText.inputType = InputType.TYPE_CLASS_NUMBER
+                        directorInputText.setHint(getString(R.string.season_number))
+
                     }
                     getString(R.string.music_category) -> {
-                        directorInputText.visibility = View.VISIBLE
                         directorInputText.setHint(getString(R.string.artist))
                     }
                 }
@@ -123,9 +125,9 @@ class NoteEditActivity : AppCompatActivity() {
                     if (titleInputText.text.isNotBlank() &&
                             yearInputText.text.isNotBlank()) {
                         val db = DatabaseHelper(context)
-                        val tvShow = TVShow(titleInputText.text.toString(), yearInputText.text.toString().toInt())
+                        val tvShow = TVShow(titleInputText.text.toString(), directorInputText.text.toString().toInt(), yearInputText.text.toString().toInt())
                         if (intent.getStringExtra("type") == "edit") {
-                            db.updateTVShow(tvShow.title, tvShow.releaseDate)
+                            db.updateTVShow(tvShow.title, tvShow.season, tvShow.releaseDate)
                         } else {
                             db.insertData(tvShow)
                         }

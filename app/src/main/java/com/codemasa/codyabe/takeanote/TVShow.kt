@@ -9,9 +9,11 @@ class TVShow{
     var title: String = ""
     var releaseDate: Int = 0
     var imageURL : String = ""
+    var season: Int = 0
 
-    constructor(title: String, releaseDate: Int) {
+    constructor(title: String, season: Int, releaseDate: Int) {
         this.title = title
+        this.season = season
         this.releaseDate = releaseDate
     }
     constructor() {
