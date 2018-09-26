@@ -63,6 +63,7 @@ class MovieAdapter(private val context: Context,
         }
 
 
+
         titleTextView.text = movie.title
         directorTextView.text = movie.director
         yearTextView.text = movie.releaseDate.toString()

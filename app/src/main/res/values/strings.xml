@@ -36,6 +36,9 @@
     <string name="artist">Artist</string>
     <string name="mark_as_favorite">Mark as Favorite</string>
     <string name="season_number">Season</string>
+    <string name="post">POST</string>
+    <string name="enter_note">Enter note</string>
+    <string name="string_placeholder">%s</string>
     <string-array name="category_array">
         <item>@string/movie_category</item>
         <item>@string/tv_category</item>
