@@ -10,6 +10,7 @@ class TVShow{
     var releaseDate: Int = 0
     var imageURL : String = ""
     var season: Int = 0
+    var favorite : Boolean = false
 
     constructor(title: String, season: Int, releaseDate: Int) {
         this.title = title

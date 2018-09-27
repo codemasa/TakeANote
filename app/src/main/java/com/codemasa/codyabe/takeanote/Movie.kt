@@ -10,6 +10,7 @@ class Movie{
     var director: String = ""
     var releaseDate: Int = 0
     var imageURL : String = ""
+    var favorite : Boolean = false
 
     constructor(title: String, director: String, releaseDate: Int) {
         this.title = title

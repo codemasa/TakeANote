@@ -12,8 +12,7 @@ import android.view.MenuItem
 
 class NoteTakingActivity : AppCompatActivity() {
 
-    internal lateinit var recyclerView: RecyclerView
-    internal lateinit var noteAdapter: NoteListAdapter
+    internal lateinit var noteListView: RecyclerView
 
 
     companion object {
@@ -39,6 +38,9 @@ class NoteTakingActivity : AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.ic_back)
             setTitle("Note Editor")
         }
+
+
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -10,6 +10,7 @@ class Album{
     var artist: String = ""
     var releaseDate: Int = 0
     var imageURL : String = ""
+    var favorite : Boolean = false
 
     constructor(title: String, artist: String, releaseDate: Int) {
         this.title = title

@@ -3,6 +3,7 @@ package com.codemasa.codyabe.takeanote
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.media.Image
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.*
@@ -33,6 +34,14 @@ class MovieAdapter(private val context: Context,
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val movie : Movie = getItem(position) as Movie
+
+        val favoriteStar : ImageView = holder.itemView.findViewById(R.id.favorite_movie)
+        if(movie.favorite){
+            favoriteStar.visibility = View.VISIBLE
+        }
+        else{
+            favoriteStar.visibility = View.GONE
+        }
 
         val rearrangeButton : Button
         rearrangeButton = holder.itemView.findViewById(R.id.rearrange_button)
@@ -107,6 +116,10 @@ class MovieAdapter(private val context: Context,
         moreOptionsMenu.setOnMenuItemClickListener{item ->
             val db = DatabaseHelper(context)
             when(item.itemId) {
+                R.id.popup_favorite -> {
+                    db.markAsFavorite(movie)
+                    true
+                }
                 R.id.popup_delete -> {
                     Toast.makeText(context, "Delete", Toast.LENGTH_LONG).show()
                     db.deleteMovie(movie.id)

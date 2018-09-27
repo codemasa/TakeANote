@@ -14,6 +14,7 @@ val DATABASE_NAME = "TakeANoteDB"
 val MOVIE_TABLE = "movies"
 val TV_TABLE = "tv"
 val ALBUM_TABLE = "album"
+val NOTE_TABLE = "note"
 
 // Columns
 val COL_ID = "id"
@@ -22,6 +23,10 @@ val COL_DIRECTOR = "director"
 val COL_ARTIST = "artist"
 val COL_RELEASE_DATE = "date"
 val COL_SEASON = "season"
+val COL_NOTE = "note"
+val COL_CATEGORY = "category"
+val COL_FAVORITE = "favorite"
+val COL_TIME = "time"
 
 class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
 
@@ -31,23 +36,34 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
                 COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_TITLE + " VARCHAR(256), " +
                 COL_DIRECTOR + " VARCHAR(256), " +
-                COL_RELEASE_DATE + " INTEGER);"
+                COL_RELEASE_DATE + " INTEGER, " +
+                COL_FAVORITE + " BOOLEAN);"
 
         var createTVTable = "CREATE TABLE "  +  TV_TABLE + " (" +
                 COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_TITLE + " VARCHAR(256), " +
                 COL_SEASON + " INTEGER, " +
-                COL_RELEASE_DATE + " INTEGER);"
+                COL_RELEASE_DATE + " INTEGER, " +
+                COL_FAVORITE + " BOOLEAN);"
+
 
         var createAlbumTable = "CREATE TABLE "  +  ALBUM_TABLE + " (" +
                 COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_TITLE + " VARCHAR(256), " +
                 COL_ARTIST + " VARCHAR(256), " +
-                COL_RELEASE_DATE + " INTEGER);"
+                COL_RELEASE_DATE + " INTEGER, " +
+                COL_FAVORITE + " BOOLEAN);"
+
+        var createNoteTable = "CREATE TABLE "  +  NOTE_TABLE + " (" +
+                COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COL_NOTE + " VARCHAR(256), " +
+                COL_CATEGORY + " VARCHAR(256), " +
+                COL_TIME + " LONG);"
         
         db?.execSQL(createMovieTable)
         db?.execSQL(createTVTable)
         db?.execSQL(createAlbumTable)
+        db?.execSQL(createNoteTable)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, p1: Int, p2: Int) {
@@ -60,6 +76,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         cv.put(COL_TITLE, movie.title)
         cv.put(COL_DIRECTOR, movie.director)
         cv.put(COL_RELEASE_DATE, movie.releaseDate)
+        cv.put(COL_FAVORITE, false)
         var result = db.insert(MOVIE_TABLE, null, cv)
         if (result == -1.toLong()) {
             Toast.makeText(context,"Failed", Toast.LENGTH_SHORT).show()
@@ -76,6 +93,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         cv.put(COL_TITLE, tvShow.title)
         cv.put(COL_SEASON, tvShow.season)
         cv.put(COL_RELEASE_DATE, tvShow.releaseDate)
+        cv.put(COL_FAVORITE, false)
         var result = db.insert(TV_TABLE, null, cv)
         if (result == -1.toLong()) {
             Toast.makeText(context,"Failed", Toast.LENGTH_SHORT).show()
@@ -93,6 +111,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         cv.put(COL_TITLE, album.title)
         cv.put(COL_DIRECTOR, album.artist)
         cv.put(COL_RELEASE_DATE, album.releaseDate)
+        cv.put(COL_FAVORITE, false)
         var result = db.insert(ALBUM_TABLE, null, cv)
         if (result == -1.toLong()) {
             Toast.makeText(context,"Failed", Toast.LENGTH_SHORT).show()
@@ -116,6 +135,8 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
                 movie.title = result.getString(result.getColumnIndex(COL_TITLE))
                 movie.director = result.getString(result.getColumnIndex(COL_DIRECTOR))
                 movie.releaseDate = result.getString(result.getColumnIndex(COL_RELEASE_DATE)).toInt()
+                movie.favorite = result.getInt(result.getColumnIndex(COL_FAVORITE)) > 0
+
                 list.add(movie)
 
             }while (result.moveToNext())
@@ -138,6 +159,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
                 tvShow.title = result.getString(result.getColumnIndex(COL_TITLE))
                 tvShow.season = result.getString(result.getColumnIndex(COL_SEASON)).toInt()
                 tvShow.releaseDate = result.getString(result.getColumnIndex(COL_RELEASE_DATE)).toInt()
+                tvShow.favorite = result.getInt(result.getColumnIndex(COL_FAVORITE)) > 0
                 list.add(tvShow)
 
             }while (result.moveToNext())
@@ -160,6 +182,8 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
                 album.title = result.getString(result.getColumnIndex(COL_TITLE))
                 album.artist = result.getString(result.getColumnIndex(COL_ARTIST))
                 album.releaseDate = result.getString(result.getColumnIndex(COL_RELEASE_DATE)).toInt()
+                album.favorite = result.getInt(result.getColumnIndex(COL_FAVORITE)) > 0
+
                 list.add(album)
 
             }while (result.moveToNext())
@@ -244,6 +268,66 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         }
         result.close()
         db.close()
+    }
+
+    fun markAsFavorite(movie : Movie){
+        val db = this.writableDatabase
+        val query = "SELECT * FROM " + MOVIE_TABLE
+        val result = db.rawQuery(query, null)
+        if(result.moveToFirst()) {
+            do{
+                if (movie.favorite == false) {
+                    val cv = ContentValues()
+                    cv.put(COL_FAVORITE, true)
+                    db.update(MOVIE_TABLE, cv, COL_ID+"=?", arrayOf(movie.id.toString()))
+                }
+                else {
+                    val cv = ContentValues()
+                    cv.put(COL_FAVORITE, false)
+                    db.update(MOVIE_TABLE, cv, COL_ID+"=?", arrayOf(movie.id.toString()))
+                }
+            }while (result.moveToNext())
+        }
+    }
+
+    fun markAsFavorite(tvShow : TVShow){
+        val db = this.writableDatabase
+        val query = "SELECT * FROM " + TV_TABLE
+        val result = db.rawQuery(query, null)
+        if(result.moveToFirst()) {
+            do{
+                if (tvShow.favorite == false) {
+                    val cv = ContentValues()
+                    cv.put(COL_FAVORITE, true)
+                    db.update(TV_TABLE, cv, COL_ID+"=?", arrayOf(tvShow.id.toString()))
+                }
+                else {
+                    val cv = ContentValues()
+                    cv.put(COL_FAVORITE, false)
+                    db.update(TV_TABLE, cv, COL_ID+"=?", arrayOf(tvShow.id.toString()))
+                }
+            }while (result.moveToNext())
+        }
+    }
+
+    fun markAsFavorite(album: Album){
+        val db = this.writableDatabase
+        val query = "SELECT * FROM " + ALBUM_TABLE
+        val result = db.rawQuery(query, null)
+        if(result.moveToFirst()) {
+            do{
+                if (album.favorite == false) {
+                    val cv = ContentValues()
+                    cv.put(COL_FAVORITE, true)
+                    db.update(ALBUM_TABLE, cv, COL_ID+"=?", arrayOf(album.id.toString()))
+                }
+                else {
+                    val cv = ContentValues()
+                    cv.put(COL_FAVORITE, false)
+                    db.update(ALBUM_TABLE, cv, COL_ID+"=?", arrayOf(album.id.toString()))
+                }
+            }while (result.moveToNext())
+        }
     }
 
     fun findMovie(movie : Movie) : Boolean{

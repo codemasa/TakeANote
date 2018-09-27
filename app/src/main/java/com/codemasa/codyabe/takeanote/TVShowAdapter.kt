@@ -30,6 +30,14 @@ class TVShowAdapter(private val context: Context,
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val tvShow : TVShow = getItem(position) as TVShow
 
+        val favoriteStar : ImageView = holder.itemView.findViewById(R.id.favorite_tv_show)
+        if(tvShow.favorite){
+            favoriteStar.visibility = View.VISIBLE
+        }
+        else{
+            favoriteStar.visibility = View.GONE
+        }
+
         val rearrangeButton : Button
         rearrangeButton = holder.itemView.findViewById(R.id.rearrange_button)
         rearrangeButton.setOnClickListener {
@@ -103,6 +111,10 @@ class TVShowAdapter(private val context: Context,
         moreOptionsMenu.setOnMenuItemClickListener{item ->
             val db = DatabaseHelper(context)
             when(item.itemId) {
+                R.id.popup_favorite -> {
+                    db.markAsFavorite(tvShow)
+                    true
+                }
                 R.id.popup_delete -> {
                     Toast.makeText(context, "Delete", Toast.LENGTH_LONG).show()
                     db.deleteMovie(tvShow.id)
