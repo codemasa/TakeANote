@@ -58,6 +58,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
                 COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_NOTE + " VARCHAR(256), " +
                 COL_CATEGORY + " VARCHAR(256), " +
+                COL_TITLE + " VARCHAR(256), " +
                 COL_TIME + " LONG);"
         
         db?.execSQL(createMovieTable)
@@ -121,6 +122,23 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
 
         }
 
+    }
+
+    fun insertNote(note:Note){
+        val db = this.writableDatabase
+        val cv = ContentValues()
+        cv.put(COL_NOTE, note.noteBody)
+        cv.put(COL_CATEGORY, note.category)
+        cv.put(COL_TITLE, note.title)
+        cv.put(COL_TIME, note.createdAt)
+        val result = db.insert(NOTE_TABLE, null, cv)
+        if (result == -1.toLong()) {
+            Toast.makeText(context,"Failed", Toast.LENGTH_SHORT).show()
+        }
+        else {
+            Toast.makeText(context,"Saved", Toast.LENGTH_SHORT).show()
+
+        }
     }
 
     fun readMovies() : MutableList<Movie>{
@@ -194,6 +212,27 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         return list
     }
 
+
+    fun readNotes(category: String, title: String) : MutableList<Note>{
+        val list : MutableList<Note> = ArrayList()
+        val db = this.readableDatabase
+        val query = "SELECT * FROM " + NOTE_TABLE + " WHERE category =?" + " AND title=?"
+        val result = db.rawQuery(query, arrayOf(category,title))
+        if(result.moveToFirst()) {
+            do{
+                val note = Note()
+                note.noteBody = result.getString(result.getColumnIndex(COL_NOTE))
+                note.category = result.getString(result.getColumnIndex(COL_CATEGORY))
+                note.title = result.getString(result.getColumnIndex(COL_TITLE))
+                note.createdAt = result.getLong(result.getColumnIndex(COL_TIME))
+                list.add(note)
+
+            }while (result.moveToNext())
+        }
+        result.close()
+        db.close()
+        return list
+    }
 
     fun deleteMovie(id : Int) {
         val db = this.writableDatabase

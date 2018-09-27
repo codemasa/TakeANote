@@ -1,8 +1,19 @@
 package com.codemasa.codyabe.takeanote
 
 class Note {
-    val noteBody: String = ""
-    val category: String = ""
-    val createdAt: Long = 0
+    var noteBody: String = ""
+    var category: String = ""
+    var createdAt: Long = 0
+    var title: String? = ""
+
+    constructor(noteBody: String, category : String, title: String, createdAt: Long) {
+        this.noteBody = noteBody
+        this.category = category
+        this.title = title
+        this.createdAt = createdAt
+    }
+    constructor(){
+
+    }
 
 }

@@ -67,6 +67,8 @@ class MovieAdapter(private val context: Context,
             val intent : Intent = NoteTakingActivity.newIntent(context)
             val activity : MainActivity = context as MainActivity
             view?.startAnimation(AnimationUtils.loadAnimation(context, R.anim.click_item_on_list))
+            intent.putExtra("category", "movie")
+            intent.putExtra("title", movie.title)
             context.startActivity(intent)
             activity.overridePendingTransition(R.anim.left_to_right_enter, R.anim.left_to_right_exit)
         }
