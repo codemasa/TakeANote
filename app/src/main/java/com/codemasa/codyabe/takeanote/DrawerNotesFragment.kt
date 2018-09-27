@@ -1,5 +1,6 @@
 package com.codemasa.codyabe.takeanote
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
@@ -75,7 +76,7 @@ class DrawerNotesFragment : Fragment() {
         floatingActionButton.setOnClickListener {_->
             val intent : Intent = NoteEditActivity.newIntent(this.context)
             intent.putExtra("type", "new")
-            startActivity(intent)
+            startActivityForResult(intent,1)
         }
 
 
@@ -91,6 +92,7 @@ class DrawerNotesFragment : Fragment() {
     override fun onResume() {
         super.onResume()
     }
+
 
     public fun openFragment(fragment: Fragment, itemIndex : Int?) {
         val transaction = childFragmentManager.beginTransaction()

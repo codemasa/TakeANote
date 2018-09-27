@@ -87,6 +87,7 @@ class TVShowAdapter(private val context: Context,
                 }
         )
         requestQueue.add(APIRequest)
+
     }
 
 
@@ -113,11 +114,15 @@ class TVShowAdapter(private val context: Context,
             when(item.itemId) {
                 R.id.popup_favorite -> {
                     db.markAsFavorite(tvShow)
+                    tvShow.favorite = !tvShow.favorite
+                    this.notifyDataSetChanged()
+
                     true
                 }
                 R.id.popup_delete -> {
-                    Toast.makeText(context, "Delete", Toast.LENGTH_LONG).show()
-                    db.deleteMovie(tvShow.id)
+                    dataSource.remove(tvShow)
+                    db.deleteTVShow(tvShow.id)
+                    this.notifyDataSetChanged()
                     true
                 }
                 R.id.popup_edit -> {

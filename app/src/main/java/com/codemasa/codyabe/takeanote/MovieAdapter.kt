@@ -91,7 +91,6 @@ class MovieAdapter(private val context: Context,
         requestQueue.add(APIRequest)
 
 
-
     }
 
     internal lateinit var requestQueue : RequestQueue
@@ -118,11 +117,14 @@ class MovieAdapter(private val context: Context,
             when(item.itemId) {
                 R.id.popup_favorite -> {
                     db.markAsFavorite(movie)
+                    movie.favorite = !movie.favorite
+                    this.notifyDataSetChanged()
                     true
                 }
                 R.id.popup_delete -> {
-                    Toast.makeText(context, "Delete", Toast.LENGTH_LONG).show()
                     db.deleteMovie(movie.id)
+                    dataSource.remove(movie)
+                    this.notifyDataSetChanged()
                     true
                 }
                 R.id.popup_edit -> {

@@ -1,5 +1,6 @@
 package com.codemasa.codyabe.takeanote
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -145,6 +146,7 @@ class NoteEditActivity : AppCompatActivity() {
                         } else {
                             db.insertData(album)
                         }
+
                         finish()
                     }
                 }
