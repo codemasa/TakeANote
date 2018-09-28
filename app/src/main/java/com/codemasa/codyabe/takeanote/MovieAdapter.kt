@@ -50,7 +50,6 @@ class MovieAdapter(private val context: Context,
         rearrangeButton.setOnClickListener {
             Toast.makeText(context, "Ready to rearrange", Toast.LENGTH_LONG).show()
 
-            true
         }
         rearrangeButton.setOnDragListener { view, dragEvent ->
 
@@ -175,10 +174,10 @@ class MovieAdapter(private val context: Context,
 
     public class ViewHolder : RecyclerView.ViewHolder {
 
-        internal lateinit var titleTextView : TextView
-        internal lateinit var directorTextView : TextView
-        internal lateinit var yearTextView : TextView
-        internal lateinit var thumbnail : ImageView
+        internal var titleTextView : TextView
+        internal var directorTextView : TextView
+        internal var yearTextView : TextView
+        internal var thumbnail : ImageView
 
         constructor(view: View) : super(view) {
             titleTextView  = view.findViewById(R.id.category_list_title)

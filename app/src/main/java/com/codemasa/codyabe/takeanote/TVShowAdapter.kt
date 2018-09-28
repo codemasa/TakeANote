@@ -44,7 +44,6 @@ class TVShowAdapter(private val context: Context,
         rearrangeButton.setOnClickListener {
             Toast.makeText(context, "Ready to rearrange", Toast.LENGTH_LONG).show()
 
-            true
         }
         rearrangeButton.setOnDragListener { view, dragEvent ->
 
@@ -73,9 +72,9 @@ class TVShowAdapter(private val context: Context,
 
 
         holder.titleTextView.text = tvShow.title
-        holder.seasonTextView.text = "Season: " + tvShow.season.toString()
+        holder.seasonTextView.text = context.getString(R.string.season).format(tvShow.season)
         holder.yearTextView.text = tvShow.releaseDate.toString()
-        if(tvShow.imageURL == null) {
+        if(tvShow.imageURL == "") {
             val APIKey = BuildConfig.ApiKey
             val imdbURL = "http://omdbapi.com/?t=" + tvShow.title + "&apikey=" + APIKey
             var APIResponse: String = ""
@@ -171,10 +170,10 @@ class TVShowAdapter(private val context: Context,
 
     public class ViewHolder : RecyclerView.ViewHolder {
 
-        internal lateinit var titleTextView : TextView
-        internal lateinit var seasonTextView : TextView
-        internal lateinit var yearTextView : TextView
-        internal lateinit var thumbnail : ImageView
+        internal var titleTextView : TextView
+        internal var seasonTextView : TextView
+        internal var yearTextView : TextView
+        internal var thumbnail : ImageView
 
         constructor(view: View) : super(view) {
             titleTextView = view.findViewById(R.id.category_list_title)

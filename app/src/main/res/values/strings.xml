@@ -40,6 +40,7 @@
     <string name="enter_note">Enter note</string>
     <string name="string_placeholder">%s</string>
     <string name="image_add">image add</string>
+    <string name="season">Season: %d</string>
     <string-array name="category_array">
         <item>@string/movie_category</item>
         <item>@string/tv_category</item>
