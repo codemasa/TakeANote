@@ -27,7 +27,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity"/>
         </activity>
-        <activity android:name=".NoteTakingActivity">
+        <activity android:name=".NoteTakingActivity"
+                    android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.EDIT" />
 

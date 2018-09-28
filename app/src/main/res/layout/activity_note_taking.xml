@@ -6,15 +6,7 @@
     android:layout_height="match_parent"
     tools:context="com.codemasa.codyabe.takeanote.NoteTakingActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/note_taking_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:foregroundGravity="top"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme" />
-
+    <!-- A horizontal line between the chatbox and RecyclerView -->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/reyclerview_note_list"
         android:layout_width="match_parent"
@@ -23,9 +15,22 @@
         android:layout_alignParentStart="true"
         android:layout_marginBottom="55dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginStart="10dp"></android.support.v7.widget.RecyclerView>
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="?attr/actionBarSize "
+        android:foregroundGravity="bottom">
 
-    <!-- A horizontal line between the chatbox and RecyclerView -->
+    </android.support.v7.widget.RecyclerView>
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/note_taking_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="-10dp"
+        android:background="?attr/colorPrimary"
+        android:foregroundGravity="top"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
