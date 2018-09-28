@@ -2,6 +2,7 @@ package com.codemasa.codyabe.takeanote
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.*
@@ -74,21 +75,25 @@ class TVShowAdapter(private val context: Context,
         holder.titleTextView.text = tvShow.title
         holder.seasonTextView.text = "Season: " + tvShow.season.toString()
         holder.yearTextView.text = tvShow.releaseDate.toString()
-        val APIKey = BuildConfig.ApiKey
-        val imdbURL = "http://omdbapi.com/?t=" + tvShow.title +"&apikey=" + APIKey
-        var APIResponse : String = ""
-        requestQueue = Volley.newRequestQueue(context)
-        val APIRequest = JsonObjectRequest(Request.Method.GET, imdbURL, null,
-                Response.Listener {response ->
-                    APIResponse = response.getString("imdbID")
-                    Picasso.get().load("http://img.omdbapi.com/?i=" + APIResponse +"&h=600&apikey=" + APIKey).into(holder.thumbnail)
+        if(tvShow.imageURL == null) {
+            val APIKey = BuildConfig.ApiKey
+            val imdbURL = "http://omdbapi.com/?t=" + tvShow.title + "&apikey=" + APIKey
+            var APIResponse: String = ""
+            requestQueue = Volley.newRequestQueue(context)
+            val APIRequest = JsonObjectRequest(Request.Method.GET, imdbURL, null,
+                    Response.Listener { response ->
+                        APIResponse = response.getString("imdbID")
+                        Picasso.get().load("http://img.omdbapi.com/?i=" + APIResponse + "&h=600&apikey=" + APIKey).into(holder.thumbnail)
 
-                },
-                Response.ErrorListener {error ->
+                    },
+                    Response.ErrorListener { error ->
 
-                }
-        )
-        requestQueue.add(APIRequest)
+                    }
+            )
+            requestQueue.add(APIRequest)
+        }else {
+            holder.thumbnail.setImageURI(Uri.parse(tvShow.imageURL))
+        }
 
 
     }
@@ -133,6 +138,7 @@ class TVShowAdapter(private val context: Context,
                     intent.putExtra("title", tvShow.title)
                     intent.putExtra("director", tvShow.season)
                     intent.putExtra("year", tvShow.releaseDate)
+                    intent.putExtra("imageURL", tvShow.imageURL)
                     intent.putExtra("type", "edit")
                     context.startActivity(intent)
 

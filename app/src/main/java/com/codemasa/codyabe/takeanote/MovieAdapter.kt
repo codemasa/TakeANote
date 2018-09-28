@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.media.Image
+import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.*
@@ -15,6 +16,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.squareup.picasso.Picasso
+import java.net.URI
 
 
 class MovieAdapter(private val context: Context,
@@ -80,17 +82,22 @@ class MovieAdapter(private val context: Context,
         val imdbURL = "http://omdbapi.com/?t=" + movie.title +"&apikey=" + APIKey
         var APIResponse : String = ""
         requestQueue = Volley.newRequestQueue(context)
-        val APIRequest = JsonObjectRequest(Request.Method.GET, imdbURL, null,
-                Response.Listener {response ->
-                    APIResponse = response.getString("imdbID")
-                    Picasso.get().load("http://img.omdbapi.com/?i=" + APIResponse +"&h=600&apikey=" + APIKey).into(holder.thumbnail)
+        if(movie.imageURL == "") {
+            val APIRequest = JsonObjectRequest(Request.Method.GET, imdbURL, null,
+                    Response.Listener { response ->
+                        APIResponse = response.getString("imdbID")
+                        Picasso.get().load("http://img.omdbapi.com/?i=" + APIResponse + "&h=600&apikey=" + APIKey).into(holder.thumbnail)
 
-                },
-                Response.ErrorListener {error ->
+                    },
+                    Response.ErrorListener { error ->
 
-                }
-        )
-        requestQueue.add(APIRequest)
+                    }
+            )
+            requestQueue.add(APIRequest)
+        }
+        else{
+            holder.thumbnail.setImageURI(Uri.parse(movie.imageURL))
+        }
 
 
     }
@@ -134,6 +141,7 @@ class MovieAdapter(private val context: Context,
                     intent.putExtra("title", movie.title)
                     intent.putExtra("director", movie.director)
                     intent.putExtra("year", movie.releaseDate)
+                    intent.putExtra("imageURL", movie.imageURL)
                     intent.putExtra("type", "edit")
                     context.startActivity(intent)
 

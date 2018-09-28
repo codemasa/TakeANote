@@ -33,6 +33,8 @@ class NoteEditActivity : AppCompatActivity() {
     internal lateinit var yearInputText : AppCompatEditText
     internal lateinit var categorySpinner : AppCompatSpinner
     internal lateinit var saveButton: Button
+    internal lateinit var imageAddButton : ImageButton
+    internal var imageURL: String = ""
 
     companion object {
 
@@ -92,6 +94,13 @@ class NoteEditActivity : AppCompatActivity() {
         }
 
 
+        imageAddButton = findViewById(R.id.image_add_button)
+        imageAddButton.setOnClickListener {
+            val pickPhoto = Intent(Intent.ACTION_OPEN_DOCUMENT,
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(pickPhoto, 1)
+        }
+
         val context = this
 
         val intent = intent
@@ -99,6 +108,7 @@ class NoteEditActivity : AppCompatActivity() {
             titleInputText.setText(intent.getStringExtra("title"))
             directorInputText.setText(intent.getStringExtra("director"))
             yearInputText.setText(intent.getIntExtra("year",0).toString())
+            imageURL = intent.getStringExtra("imageURL")
 
         }
 
@@ -112,9 +122,9 @@ class NoteEditActivity : AppCompatActivity() {
                             directorInputText.text.isNotBlank() &&
                             yearInputText.text.isNotBlank()) {
                         val db = DatabaseHelper(context)
-                        val movie = Movie(titleInputText.text.toString(), directorInputText.text.toString(), yearInputText.text.toString().toInt())
+                        val movie = Movie(titleInputText.text.toString(), directorInputText.text.toString(), yearInputText.text.toString().toInt(), imageURL)
                         if (intent.getStringExtra("type") == "edit") {
-                            db.updateMovies(movie.title, movie.director, movie.releaseDate)
+                            db.updateMovies(movie.title, movie.director, movie.releaseDate, movie.imageURL)
                         } else {
                             db.insertData(movie)
                         }
@@ -126,9 +136,9 @@ class NoteEditActivity : AppCompatActivity() {
                     if (titleInputText.text.isNotBlank() &&
                             yearInputText.text.isNotBlank()) {
                         val db = DatabaseHelper(context)
-                        val tvShow = TVShow(titleInputText.text.toString(), directorInputText.text.toString().toInt(), yearInputText.text.toString().toInt())
+                        val tvShow = TVShow(titleInputText.text.toString(), directorInputText.text.toString().toInt(), yearInputText.text.toString().toInt(), imageURL)
                         if (intent.getStringExtra("type") == "edit") {
-                            db.updateTVShow(tvShow.title, tvShow.season, tvShow.releaseDate)
+                            db.updateTVShow(tvShow.title, tvShow.season, tvShow.releaseDate, tvShow.imageURL)
                         } else {
                             db.insertData(tvShow)
                         }
@@ -140,9 +150,9 @@ class NoteEditActivity : AppCompatActivity() {
                             directorInputText.text.isNotBlank() &&
                             yearInputText.text.isNotBlank()) {
                         val db = DatabaseHelper(context)
-                        val album = Album(titleInputText.text.toString(), directorInputText.text.toString(), yearInputText.text.toString().toInt())
+                        val album = Album(titleInputText.text.toString(), directorInputText.text.toString(), yearInputText.text.toString().toInt(),imageURL)
                         if (intent.getStringExtra("type") == "edit") {
-                            db.updateAlbum(album.title, album.artist, album.releaseDate)
+                            db.updateAlbum(album.title, album.artist, album.releaseDate, album.imageURL)
                         } else {
                             db.insertData(album)
                         }
@@ -166,6 +176,21 @@ class NoteEditActivity : AppCompatActivity() {
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, imageReturnedIntent: Intent) {
+        super.onActivityResult(requestCode, resultCode, imageReturnedIntent)
+        when (requestCode) {
+            0 -> if (resultCode === Activity.RESULT_OK) {
+                val selectedImage = imageReturnedIntent.getData()
+                imageAddButton.setImageURI(selectedImage)
+                imageURL = selectedImage.toString()
+            }
+            1 -> if (resultCode === Activity.RESULT_OK) {
+                val selectedImage = imageReturnedIntent.getData()
+                imageAddButton.setImageURI(selectedImage)
+                imageURL = selectedImage.toString()
+            }
+        }
+    }
 
     fun hideKeyboard(view: View){
         val inputMethodManager : InputMethodManager = getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager

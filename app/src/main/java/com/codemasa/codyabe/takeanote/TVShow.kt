@@ -12,10 +12,11 @@ class TVShow{
     var season: Int = 0
     var favorite : Boolean = false
 
-    constructor(title: String, season: Int, releaseDate: Int) {
+    constructor(title: String, season: Int, releaseDate: Int, imageURL: String) {
         this.title = title
         this.season = season
         this.releaseDate = releaseDate
+        this.imageURL = imageURL
     }
     constructor() {
     }

@@ -103,6 +103,7 @@ class AlbumAdapter(private val context: Context,
                     intent.putExtra("title", movie.title)
                     intent.putExtra("director", movie.director)
                     intent.putExtra("year", movie.releaseDate)
+                    intent.putExtra("imageURL", movie.imageURL)
                     intent.putExtra("type", "edit")
                     context.startActivity(intent)
 

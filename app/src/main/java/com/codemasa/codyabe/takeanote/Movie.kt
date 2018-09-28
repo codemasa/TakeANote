@@ -12,10 +12,11 @@ class Movie{
     var imageURL : String = ""
     var favorite : Boolean = false
 
-    constructor(title: String, director: String, releaseDate: Int) {
+    constructor(title: String, director: String, releaseDate: Int, imageURL: String) {
         this.title = title
         this.director = director
         this.releaseDate = releaseDate
+        this.imageURL = imageURL
     }
     constructor() {
     }

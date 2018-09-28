@@ -27,6 +27,7 @@ val COL_NOTE = "note"
 val COL_CATEGORY = "category"
 val COL_FAVORITE = "favorite"
 val COL_TIME = "time"
+val COL_THUMBNAIL = "thumbnail"
 
 class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, 1) {
 
@@ -37,6 +38,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
                 COL_TITLE + " VARCHAR(256), " +
                 COL_DIRECTOR + " VARCHAR(256), " +
                 COL_RELEASE_DATE + " INTEGER, " +
+                COL_THUMBNAIL + " VARCHAR(256), " +
                 COL_FAVORITE + " BOOLEAN);"
 
         var createTVTable = "CREATE TABLE "  +  TV_TABLE + " (" +
@@ -44,6 +46,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
                 COL_TITLE + " VARCHAR(256), " +
                 COL_SEASON + " INTEGER, " +
                 COL_RELEASE_DATE + " INTEGER, " +
+                COL_THUMBNAIL + " VARCHAR(256), " +
                 COL_FAVORITE + " BOOLEAN);"
 
 
@@ -52,6 +55,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
                 COL_TITLE + " VARCHAR(256), " +
                 COL_ARTIST + " VARCHAR(256), " +
                 COL_RELEASE_DATE + " INTEGER, " +
+                COL_THUMBNAIL + " VARCHAR(256), " +
                 COL_FAVORITE + " BOOLEAN);"
 
         var createNoteTable = "CREATE TABLE "  +  NOTE_TABLE + " (" +
@@ -77,6 +81,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         cv.put(COL_TITLE, movie.title)
         cv.put(COL_DIRECTOR, movie.director)
         cv.put(COL_RELEASE_DATE, movie.releaseDate)
+        cv.put(COL_THUMBNAIL, movie.imageURL)
         cv.put(COL_FAVORITE, false)
         var result = db.insert(MOVIE_TABLE, null, cv)
         if (result == -1.toLong()) {
@@ -94,6 +99,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         cv.put(COL_TITLE, tvShow.title)
         cv.put(COL_SEASON, tvShow.season)
         cv.put(COL_RELEASE_DATE, tvShow.releaseDate)
+        cv.put(COL_THUMBNAIL, tvShow.imageURL)
         cv.put(COL_FAVORITE, false)
         var result = db.insert(TV_TABLE, null, cv)
         if (result == -1.toLong()) {
@@ -112,6 +118,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         cv.put(COL_TITLE, album.title)
         cv.put(COL_DIRECTOR, album.artist)
         cv.put(COL_RELEASE_DATE, album.releaseDate)
+        cv.put(COL_THUMBNAIL, album.imageURL)
         cv.put(COL_FAVORITE, false)
         var result = db.insert(ALBUM_TABLE, null, cv)
         if (result == -1.toLong()) {
@@ -154,6 +161,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
                 movie.director = result.getString(result.getColumnIndex(COL_DIRECTOR))
                 movie.releaseDate = result.getString(result.getColumnIndex(COL_RELEASE_DATE)).toInt()
                 movie.favorite = result.getInt(result.getColumnIndex(COL_FAVORITE)) > 0
+                movie.imageURL = result.getString(result.getColumnIndex(COL_THUMBNAIL))
 
                 list.add(movie)
 
@@ -178,6 +186,8 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
                 tvShow.season = result.getString(result.getColumnIndex(COL_SEASON)).toInt()
                 tvShow.releaseDate = result.getString(result.getColumnIndex(COL_RELEASE_DATE)).toInt()
                 tvShow.favorite = result.getInt(result.getColumnIndex(COL_FAVORITE)) > 0
+                tvShow.imageURL = result.getString(result.getColumnIndex(COL_THUMBNAIL))
+
                 list.add(tvShow)
 
             }while (result.moveToNext())
@@ -201,6 +211,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
                 album.artist = result.getString(result.getColumnIndex(COL_ARTIST))
                 album.releaseDate = result.getString(result.getColumnIndex(COL_RELEASE_DATE)).toInt()
                 album.favorite = result.getInt(result.getColumnIndex(COL_FAVORITE)) > 0
+                album.imageURL = result.getString(result.getColumnIndex(COL_THUMBNAIL))
 
                 list.add(album)
 
@@ -255,16 +266,17 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         db.close()
     }
 
-    fun updateMovies(title: String?, director: String?, year: Int?){
+    fun updateMovies(title: String?, director: String?, year: Int?, imageURL: String?){
         val db = this.writableDatabase
         val query = "SELECT * FROM "  + MOVIE_TABLE
         val result = db.rawQuery(query, null)
         if(result.moveToFirst()) {
             do{
                 val cv = ContentValues()
-                cv.put(COL_TITLE, if(title.isNullOrBlank()) title  else result.getString(result.getColumnIndex(COL_TITLE)))
-                cv.put(COL_DIRECTOR, if(director.isNullOrBlank()) director  else result.getString(result.getColumnIndex(COL_DIRECTOR)))
+                cv.put(COL_TITLE, if(!title.isNullOrBlank()) title  else result.getString(result.getColumnIndex(COL_TITLE)))
+                cv.put(COL_DIRECTOR, if(!director.isNullOrBlank()) director  else result.getString(result.getColumnIndex(COL_DIRECTOR)))
                 cv.put(COL_RELEASE_DATE, if(year != null) year  else result.getInt(result.getColumnIndex(COL_RELEASE_DATE)))
+                cv.put(COL_THUMBNAIL, if(!imageURL.isNullOrBlank()) imageURL else result.getString(result.getColumnIndex(COL_THUMBNAIL)))
                 db.update(MOVIE_TABLE, cv, COL_ID+"=?", arrayOf(result.getString(result.getColumnIndex(COL_ID))))
 
             }while (result.moveToNext())
@@ -273,16 +285,17 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         db.close()
     }
 
-    fun updateTVShow(title: String?, season: Int?, year: Int?){
+    fun updateTVShow(title: String?, season: Int?, year: Int?, imageURL : String?){
         val db = this.writableDatabase
         val query = "SELECT * FROM "  + TV_TABLE
         val result = db.rawQuery(query, null)
         if(result.moveToFirst()) {
             do{
                 val cv = ContentValues()
-                cv.put(COL_TITLE, if(title.isNullOrBlank()) title  else result.getString(result.getColumnIndex(COL_TITLE)))
+                cv.put(COL_TITLE, if(!title.isNullOrBlank()) title  else result.getString(result.getColumnIndex(COL_TITLE)))
                 cv.put(COL_SEASON, if(season != null) season  else result.getInt(result.getColumnIndex(COL_SEASON)))
                 cv.put(COL_RELEASE_DATE, if(year != null) year  else result.getInt(result.getColumnIndex(COL_RELEASE_DATE)))
+                cv.put(COL_THUMBNAIL, if(!imageURL.isNullOrBlank()) imageURL else result.getString(result.getColumnIndex(COL_THUMBNAIL)))
                 db.update(TV_TABLE, cv, COL_ID+"=?", arrayOf(result.getString(result.getColumnIndex(COL_ID))))
 
             }while (result.moveToNext())
@@ -291,7 +304,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         db.close()
     }
 
-    fun updateAlbum(title: String?, artist: String?, year: Int?){
+    fun updateAlbum(title: String?, artist: String?, year: Int?, imageURL: String?){
         val db = this.writableDatabase
         val query = "SELECT * FROM "  + ALBUM_TABLE
         val result = db.rawQuery(query, null)
@@ -301,6 +314,8 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
                 cv.put(COL_TITLE, if(title.isNullOrBlank()) title  else result.getString(result.getColumnIndex(COL_TITLE)))
                 cv.put(COL_ARTIST, if(artist.isNullOrBlank()) artist  else result.getString(result.getColumnIndex(COL_DIRECTOR)))
                 cv.put(COL_RELEASE_DATE, if(year != null) year  else result.getInt(result.getColumnIndex(COL_RELEASE_DATE)))
+                cv.put(COL_THUMBNAIL, if(!imageURL.isNullOrBlank()) imageURL else result.getString(result.getColumnIndex(COL_THUMBNAIL)))
+
                 db.update(ALBUM_TABLE, cv, COL_ID+"=?", arrayOf(result.getString(result.getColumnIndex(COL_ID))))
 
             }while (result.moveToNext())

@@ -12,10 +12,11 @@ class Album{
     var imageURL : String = ""
     var favorite : Boolean = false
 
-    constructor(title: String, artist: String, releaseDate: Int) {
+    constructor(title: String, artist: String, releaseDate: Int, imageURL: String) {
         this.title = title
         this.artist = artist
         this.releaseDate = releaseDate
+        this.imageURL = imageURL
     }
     constructor() {
     }
