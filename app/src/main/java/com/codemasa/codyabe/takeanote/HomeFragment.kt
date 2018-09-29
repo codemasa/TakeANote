@@ -1,20 +1,25 @@
 package com.codemasa.codyabe.takeanote
 
+import android.content.ClipData
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.TextView
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), OnStartDragListener {
+
 
     lateinit var movieListView : RecyclerView
     lateinit var tvShowListView : RecyclerView
+    lateinit var movieTouchHelper: ItemTouchHelper
+    lateinit var tvShowTouchHelper : ItemTouchHelper
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -31,14 +36,30 @@ class HomeFragment : Fragment() {
         val movieData = db.readMovies()
         val tvData = db.readTVShows()
 
-        val movieDataList : MovieAdapter = MovieAdapter(context, movieData as ArrayList<Movie>)
-        val tvDataList : TVShowAdapter = TVShowAdapter(context, tvData as ArrayList<TVShow>)
+        val movieDataList : MovieAdapter = MovieAdapter(context, movieData as ArrayList<Movie>,this)
+        val tvDataList : TVShowAdapter = TVShowAdapter(context, tvData as ArrayList<TVShow>, this)
 
         movieListView.adapter = movieDataList
         tvShowListView.adapter = tvDataList
 
+        val movieCallback : ItemTouchHelperCallback = ItemTouchHelperCallback(movieListView.adapter as ItemTouchHelperAdapter)
+        val tvCallback : ItemTouchHelperCallback = ItemTouchHelperCallback(tvShowListView.adapter as ItemTouchHelperAdapter)
+
+        movieTouchHelper = ItemTouchHelper(movieCallback)
+        tvShowTouchHelper = ItemTouchHelper(tvCallback)
+
+        movieTouchHelper.attachToRecyclerView(movieListView)
+        movieTouchHelper.attachToRecyclerView(tvShowListView)
+
+
+
 
         return view
+    }
+
+    override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
+        movieTouchHelper.startDrag(viewHolder)
+        tvShowTouchHelper.startDrag(viewHolder)
     }
 
     companion object {

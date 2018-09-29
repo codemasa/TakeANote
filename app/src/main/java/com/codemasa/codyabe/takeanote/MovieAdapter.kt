@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.Image
 import android.net.Uri
+import android.support.v4.view.MotionEventCompat
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.*
@@ -17,10 +18,32 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.squareup.picasso.Picasso
 import java.net.URI
+import java.util.*
 
 
 class MovieAdapter(private val context: Context,
-                   private val dataSource: ArrayList<Movie>) : RecyclerView.Adapter<MovieAdapter.ViewHolder>(){
+                   private val dataSource: ArrayList<Movie>, dragListener: OnStartDragListener) : RecyclerView.Adapter<MovieAdapter.ViewHolder>(), ItemTouchHelperAdapter{
+
+
+    internal var dragStartListener : OnStartDragListener
+    init {
+        this.dragStartListener = dragListener
+    }
+
+
+    override fun onItemMove(fromPosition: Int, toPosition: Int) {
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                Collections.swap(dataSource, i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                Collections.swap(dataSource, i, i - 1)
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition)
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val view = inflater.inflate(R.layout.list_item_fragment_movie, parent, false)
@@ -45,16 +68,22 @@ class MovieAdapter(private val context: Context,
             favoriteStar.visibility = View.GONE
         }
 
-        val rearrangeButton : Button
+        val rearrangeButton : ImageView
         rearrangeButton = holder.itemView.findViewById(R.id.rearrange_button)
-        rearrangeButton.setOnClickListener {
-            Toast.makeText(context, "Ready to rearrange", Toast.LENGTH_LONG).show()
 
-        }
-        rearrangeButton.setOnDragListener { view, dragEvent ->
+        rearrangeButton.setOnTouchListener { view, motionEvent ->
+            object : View.OnTouchListener{
+                override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
+                    if(motionEvent.action == MotionEvent.ACTION_DOWN){
+                        dragStartListener.onStartDrag(holder)
+                    }
 
-            true
+                    return false
+                }
+            }
+            false
         }
+
 
         val vertMoreButton : Button
         vertMoreButton = holder.itemView.findViewById(R.id.more_options_button)

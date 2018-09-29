@@ -5,37 +5,34 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.*
 import android.widget.*
 
-class MoviesFragment : Fragment() {
+class MoviesFragment : Fragment(), OnStartDragListener {
 
     lateinit var movieListView : RecyclerView
+    lateinit var itemTouchHelper: ItemTouchHelper
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_movies, container, false)
         movieListView = view.findViewById(R.id.movie_display_list)
         val db = DatabaseHelper(context)
         var data = db.readMovies()
-        var dataList : MovieAdapter = MovieAdapter(context, data as ArrayList<Movie>)
+        var dataList : MovieAdapter = MovieAdapter(context, data as ArrayList<Movie>, this)
         movieListView.adapter = dataList
         movieListView.layoutManager = LinearLayoutManager(context)
+        val callback : ItemTouchHelperCallback = ItemTouchHelperCallback(movieListView.adapter as ItemTouchHelperAdapter)
+        itemTouchHelper = ItemTouchHelper(callback)
+        itemTouchHelper.attachToRecyclerView(movieListView)
 
-
-//
-//        movieListView.onItemClickListener = object : AdapterView.OnItemClickListener{
-//            override fun onItemClick(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-//                val intent : Intent = NoteTakingActivity.newIntent(context)
-//
-//                startActivity(intent)
-//                activity.overridePendingTransition(R.anim.left_to_right_enter, R.anim.left_to_right_exit)
-//            }
-//
-//        }
 
         return view
     }
 
+    override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
+        itemTouchHelper.startDrag(viewHolder)
+    }
     override fun onResume() {
         super.onResume()
         movieListView.refreshDrawableState()

@@ -14,10 +14,29 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.squareup.picasso.Picasso
+import java.util.*
 
 
 class TVShowAdapter(private val context: Context,
-                    private val dataSource: ArrayList<TVShow>) : RecyclerView.Adapter<TVShowAdapter.ViewHolder>(){
+                    private val dataSource: ArrayList<TVShow>, dragStartListener : OnStartDragListener) : RecyclerView.Adapter<TVShowAdapter.ViewHolder>(), ItemTouchHelperAdapter{
+    override fun onItemMove(fromPosition: Int, toPosition: Int) {
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                Collections.swap(dataSource, i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                Collections.swap(dataSource, i, i - 1)
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition)
+    }
+
+    val dragStartListener : OnStartDragListener
+    init{
+        this.dragStartListener = dragStartListener
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
         val view = inflater.inflate(R.layout.list_item_fragment_tv_show, parent, false)
 
@@ -41,13 +60,17 @@ class TVShowAdapter(private val context: Context,
 
         val rearrangeButton : Button
         rearrangeButton = holder.itemView.findViewById(R.id.rearrange_button)
-        rearrangeButton.setOnClickListener {
-            Toast.makeText(context, "Ready to rearrange", Toast.LENGTH_LONG).show()
+        rearrangeButton.setOnTouchListener { view, motionEvent ->
+            object : View.OnTouchListener{
+                override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
+                    if(motionEvent.action == MotionEvent.ACTION_DOWN){
+                        dragStartListener.onStartDrag(holder)
+                    }
 
-        }
-        rearrangeButton.setOnDragListener { view, dragEvent ->
-
-            true
+                    return false
+                }
+            }
+            false
         }
 
         val vertMoreButton : Button
