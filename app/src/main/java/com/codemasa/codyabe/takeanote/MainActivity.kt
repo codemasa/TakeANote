@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val context = this
         setContentView(R.layout.activity_main)
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -169,7 +170,10 @@ class MainActivity : AppCompatActivity() {
                         val drawerHeader : TextView = findViewById(R.id.drawer_header)
                         drawerHeader.text = getString(R.string.drawer_header_text)
                         val drawerHeaderSecondary : TextView = findViewById(R.id.drawer_header_secondary)
-                        drawerHeaderSecondary.text = "1"
+                        val db = DatabaseHelper(context)
+                        val countMovies = db.readMovies().size
+                        val countTVShows = db.readTVShows().size
+                        drawerHeaderSecondary.text = getString(R.string.drawer_header_secondary_text).format(countMovies + countTVShows)
                         // Respond when the drawer is opened
                     }
 

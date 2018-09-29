@@ -24,7 +24,7 @@
     <string name="tv_category">TV Show</string>
     <string name="movie_category">Movie</string>
     <string name="drawer_name_text">%s</string>
-    <string name="drawer_header_secondary_text">%s</string>
+    <string name="drawer_header_secondary_text">%d</string>
     <string name="director_input">Director</string>
     <string name="date_input">Release Year</string>
     <string name="fill_message">Please Fill in All fields!</string>
