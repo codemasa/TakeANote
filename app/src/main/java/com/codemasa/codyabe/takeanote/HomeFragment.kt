@@ -20,6 +20,12 @@ class HomeFragment : Fragment(), OnStartDragListener {
     lateinit var tvShowListView : RecyclerView
     lateinit var movieTouchHelper: ItemTouchHelper
     lateinit var tvShowTouchHelper : ItemTouchHelper
+    lateinit var movieData : MutableList<Movie>
+    lateinit var tvData : MutableList<TVShow>
+    lateinit var movieDataList: MovieAdapter
+    lateinit var tvDataList: TVShowAdapter
+    lateinit var db : DatabaseHelper
+
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -31,13 +37,13 @@ class HomeFragment : Fragment(), OnStartDragListener {
         tvShowListView.layoutManager = LinearLayoutManager(context)
 
 
-        val db = DatabaseHelper(context)
+        db = DatabaseHelper(context)
 
-        val movieData = db.readMovies()
-        val tvData = db.readTVShows()
+        movieData = db.readMovies()
+        tvData = db.readTVShows()
 
-        val movieDataList : MovieAdapter = MovieAdapter(context, movieData as ArrayList<Movie>,this)
-        val tvDataList : TVShowAdapter = TVShowAdapter(context, tvData as ArrayList<TVShow>, this)
+        movieDataList = MovieAdapter(context, movieData as ArrayList<Movie>,this)
+        tvDataList = TVShowAdapter(context, tvData as ArrayList<TVShow>, this)
 
         movieListView.adapter = movieDataList
         tvShowListView.adapter = tvDataList
@@ -60,6 +66,18 @@ class HomeFragment : Fragment(), OnStartDragListener {
     override fun onStartDrag(viewHolder: RecyclerView.ViewHolder) {
         movieTouchHelper.startDrag(viewHolder)
         tvShowTouchHelper.startDrag(viewHolder)
+    }
+
+    fun onSave() {
+        movieData = db.readMovies()
+        tvData = db.readTVShows()
+
+        movieDataList = MovieAdapter(context, movieData as ArrayList<Movie>, this)
+        tvDataList = TVShowAdapter(context, tvData as ArrayList<TVShow>, this)
+
+        movieListView.adapter = movieDataList
+        tvShowListView.adapter = tvDataList
+
     }
 
     companion object {

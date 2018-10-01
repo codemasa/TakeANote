@@ -1,6 +1,7 @@
 package com.codemasa.codyabe.takeanote
 
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
@@ -88,6 +89,20 @@ class DrawerNotesFragment : Fragment() {
         super.onSaveInstanceState(outState)
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(requestCode == 1 && resultCode == RESULT_OK) {
+            if (currentFragment == homeFragment) {
+                homeFragment.onSave()
+            }
+            else {
+                when (data!!.getStringExtra("category")) {
+                    "movie" -> moviesFragment.onSave()
+                    "tvShow" -> tvShowFragment.onSave()
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+    }
 
     override fun onResume() {
         super.onResume()

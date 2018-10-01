@@ -128,7 +128,9 @@ class NoteEditActivity : AppCompatActivity() {
                         } else {
                             db.insertData(movie)
                         }
-
+                        val resultIntent = Intent()
+                        resultIntent.putExtra("category", "movie")
+                        setResult(Activity.RESULT_OK, resultIntent)
                         finish()
                     }
                 }
@@ -142,6 +144,9 @@ class NoteEditActivity : AppCompatActivity() {
                         } else {
                             db.insertData(tvShow)
                         }
+                        val resultIntent = Intent()
+                        resultIntent.putExtra("category", "tvShow")
+                        setResult(Activity.RESULT_OK, resultIntent)
                         finish()
                     }
                 }
