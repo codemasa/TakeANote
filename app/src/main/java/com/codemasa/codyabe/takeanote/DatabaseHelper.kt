@@ -320,21 +320,19 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         db.close()
     }
 
-    fun updateMovies(title: String?, director: String?, year: Int?, imageURL: String?){
+    fun updateMovies(title: String?, director: String?, year: Int?, imageURL: String?, id: Int){
         val db = this.writableDatabase
         val query = "SELECT * FROM "  + MOVIE_TABLE
         val result = db.rawQuery(query, null)
-        if(result.moveToFirst()) {
-            do{
-                val cv = ContentValues()
-                cv.put(COL_TITLE, if(!title.isNullOrBlank()) title  else result.getString(result.getColumnIndex(COL_TITLE)))
-                cv.put(COL_DIRECTOR, if(!director.isNullOrBlank()) director  else result.getString(result.getColumnIndex(COL_DIRECTOR)))
-                cv.put(COL_RELEASE_DATE, if(year != null) year  else result.getInt(result.getColumnIndex(COL_RELEASE_DATE)))
-                cv.put(COL_THUMBNAIL, if(!imageURL.isNullOrBlank()) imageURL else result.getString(result.getColumnIndex(COL_THUMBNAIL)))
-                db.update(MOVIE_TABLE, cv, COL_ID+"=?", arrayOf(result.getString(result.getColumnIndex(COL_ID))))
 
-            }while (result.moveToNext())
-        }
+        val cv = ContentValues()
+        cv.put(COL_TITLE, if(!title.isNullOrBlank()) title  else result.getString(result.getColumnIndex(COL_TITLE)))
+        cv.put(COL_DIRECTOR, if(!director.isNullOrBlank()) director  else result.getString(result.getColumnIndex(COL_DIRECTOR)))
+        cv.put(COL_RELEASE_DATE, if(year != null) year  else result.getInt(result.getColumnIndex(COL_RELEASE_DATE)))
+        cv.put(COL_THUMBNAIL, if(!imageURL.isNullOrBlank()) imageURL else result.getString(result.getColumnIndex(COL_THUMBNAIL)))
+        db.update(MOVIE_TABLE, cv, COL_ID+"=?", arrayOf(id.toString()))
+
+
         result.close()
         db.close()
     }
@@ -382,40 +380,36 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         val db = this.writableDatabase
         val query = "SELECT * FROM " + MOVIE_TABLE
         val result = db.rawQuery(query, null)
-        if(result.moveToFirst()) {
-            do{
-                if (movie.favorite == false) {
-                    val cv = ContentValues()
-                    cv.put(COL_FAVORITE, true)
-                    db.update(MOVIE_TABLE, cv, COL_ID+"=?", arrayOf(movie.id.toString()))
-                }
-                else {
-                    val cv = ContentValues()
-                    cv.put(COL_FAVORITE, false)
-                    db.update(MOVIE_TABLE, cv, COL_ID+"=?", arrayOf(movie.id.toString()))
-                }
-            }while (result.moveToNext())
+        if (movie.favorite == false) {
+            val cv = ContentValues()
+            cv.put(COL_FAVORITE, true)
+            db.update(MOVIE_TABLE, cv, COL_ID+"=?", arrayOf(movie.id.toString()))
         }
+        else {
+            val cv = ContentValues()
+            cv.put(COL_FAVORITE, false)
+            db.update(MOVIE_TABLE, cv, COL_ID+"=?", arrayOf(movie.id.toString()))
+        }
+        result.close()
+        db.close()
     }
 
     fun markAsFavorite(tvShow : TVShow){
         val db = this.writableDatabase
         val query = "SELECT * FROM " + TV_TABLE
         val result = db.rawQuery(query, null)
-        if(result.moveToFirst()) {
-            do{
-                if (tvShow.favorite == false) {
-                    val cv = ContentValues()
-                    cv.put(COL_FAVORITE, true)
-                    db.update(TV_TABLE, cv, COL_ID+"=?", arrayOf(tvShow.id.toString()))
-                }
-                else {
-                    val cv = ContentValues()
-                    cv.put(COL_FAVORITE, false)
-                    db.update(TV_TABLE, cv, COL_ID+"=?", arrayOf(tvShow.id.toString()))
-                }
-            }while (result.moveToNext())
+        if (tvShow.favorite == false) {
+            val cv = ContentValues()
+            cv.put(COL_FAVORITE, true)
+            db.update(TV_TABLE, cv, COL_ID+"=?", arrayOf(tvShow.id.toString()))
         }
+        else {
+            val cv = ContentValues()
+            cv.put(COL_FAVORITE, false)
+            db.update(TV_TABLE, cv, COL_ID+"=?", arrayOf(tvShow.id.toString()))
+        }
+        result.close()
+        db.close()
     }
 
     fun markAsFavorite(album: Album){
@@ -436,19 +430,20 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
                 }
             }while (result.moveToNext())
         }
+        result.close()
+        db.close()
     }
 
-    fun findMovie(movie : Movie) : Boolean{
+    fun findMovie(title : String) : Int{
         val db = this.readableDatabase
-        val query = "SELECT * FROM %s WHERE title = \"%s\" AND director = \"%s\"".format(MOVIE_TABLE, movie.title, movie.director)
-        val result = db.rawQuery(query, null)
-        if (result != null) {
-            result.close()
-            db.close()
-            return true
-        }
+        val query = "SELECT " + COL_ID + " FROM " + MOVIE_TABLE + " WHERE title =?"
+        val result = db.rawQuery(query, arrayOf(title))
+        result.moveToFirst()
+        val id = result.getInt(0)
+        result.close()
         db.close()
-        return false
+        return id
+
     }
 
     fun findTVShow(tvShow : TVShow) : Boolean{

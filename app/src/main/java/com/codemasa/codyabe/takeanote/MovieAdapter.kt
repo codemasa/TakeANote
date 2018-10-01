@@ -24,7 +24,7 @@ import java.util.*
 class MovieAdapter(private val context: Context,
                    private val dataSource: ArrayList<Movie>, dragListener: OnStartDragListener) : RecyclerView.Adapter<MovieAdapter.ViewHolder>(), ItemTouchHelperAdapter{
 
-
+    internal lateinit var movie: Movie
     internal var dragStartListener : OnStartDragListener
     init {
         this.dragStartListener = dragListener
@@ -58,7 +58,7 @@ class MovieAdapter(private val context: Context,
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val movie : Movie = getItem(position) as Movie
+        movie = getItem(position) as Movie
 
         val favoriteStar : ImageView = holder.itemView.findViewById(R.id.favorite_movie)
         if(movie.favorite){
@@ -90,7 +90,7 @@ class MovieAdapter(private val context: Context,
 
         vertMoreButton.setOnClickListener {
             Toast.makeText(context, "More Options", Toast.LENGTH_LONG).show()
-            showMoreOptionsMenu(it,movie)
+            showMoreOptionsMenu(it,movie, position)
         }
 
         holder.itemView.setOnClickListener {view ->
@@ -146,7 +146,7 @@ class MovieAdapter(private val context: Context,
     }
 
 
-    fun showMoreOptionsMenu(view : View, movie:Movie){
+    fun showMoreOptionsMenu(view : View, movie:Movie, position: Int){
         val moreOptionsMenu : PopupMenu = PopupMenu(context, view)
 
         moreOptionsMenu.setOnMenuItemClickListener{item ->
@@ -159,6 +159,7 @@ class MovieAdapter(private val context: Context,
                     true
                 }
                 R.id.popup_delete -> {
+                    val movie = dataSource[position]
                     db.deleteMovie(movie.id)
                     dataSource.remove(movie)
                     this.notifyDataSetChanged()
@@ -166,12 +167,14 @@ class MovieAdapter(private val context: Context,
                 }
                 R.id.popup_edit -> {
                     val intent = NoteEditActivity.newIntent(context)
+                    intent.putExtra("id", movie.id)
                     intent.putExtra("title", movie.title)
                     intent.putExtra("director", movie.director)
                     intent.putExtra("year", movie.releaseDate)
                     intent.putExtra("imageURL", movie.imageURL)
                     intent.putExtra("type", "edit")
-                    context.startActivity(intent)
+                    (context as MainActivity).startActivityForResult(intent, 2)
+
 
 
                     true
@@ -199,6 +202,13 @@ class MovieAdapter(private val context: Context,
             moreOptionsMenu.show()
         }
 
+    }
+
+    fun onActivityResult(resultCode: Int, requestCode: Int, data: Intent?){
+        Log.d("Main", "ON ACTIVITY RESULT MOVIES ADAPTER")
+        val db = DatabaseHelper(context)
+        db.updateMovies(data!!.getStringExtra("title"), data.getStringExtra("director"), data.getIntExtra("year",0), data.getStringExtra("imageURL"), data.getIntExtra("id",0))
+        notifyDataSetChanged()
     }
 
     public class ViewHolder : RecyclerView.ViewHolder {

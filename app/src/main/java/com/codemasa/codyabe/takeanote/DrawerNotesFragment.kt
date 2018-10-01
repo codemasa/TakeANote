@@ -90,14 +90,27 @@ class DrawerNotesFragment : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if(requestCode == 1 && resultCode == RESULT_OK) {
-            if (currentFragment == homeFragment) {
-                homeFragment.onSave()
-            }
-            else {
-                when (data!!.getStringExtra("category")) {
-                    "movie" -> moviesFragment.onSave()
-                    "tvShow" -> tvShowFragment.onSave()
+        if(resultCode == RESULT_OK) {
+            when(requestCode) {
+                1 -> {
+                    if (currentFragment == homeFragment) {
+                        homeFragment.onSave()
+                    } else {
+                        when (data!!.getStringExtra("category")) {
+                            "movie" -> moviesFragment.onSave()
+                            "tvShow" -> tvShowFragment.onSave()
+                        }
+                    }
+                }
+                2 -> {
+                    if (currentFragment == homeFragment) {
+                        homeFragment.onSave()
+                    } else {
+                        when (data!!.getStringExtra("category")) {
+                            "movie" -> moviesFragment.onActivityResult(requestCode,resultCode,data)
+                            "tvShow" -> tvShowFragment.onSave()
+                        }
+                    }
                 }
             }
         }

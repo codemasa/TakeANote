@@ -1,5 +1,6 @@
 package com.codemasa.codyabe.takeanote
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
@@ -229,6 +230,19 @@ class MainActivity : AppCompatActivity() {
         }
 
         return false
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(resultCode == Activity.RESULT_OK){
+            when(requestCode){
+                2 -> {
+                    currentFragment.onActivityResult(requestCode, resultCode, data)
+                }
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data)
+
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.util.Log
 import android.view.*
 import android.widget.*
 
@@ -46,6 +47,17 @@ class MoviesFragment : Fragment(), OnStartDragListener {
         movieListView.adapter = dataList
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
+        super.onActivityResult(requestCode, resultCode, resultData)
+        db = DatabaseHelper(context)
+        data = db.readMovies()
+        dataList = MovieAdapter(context, data as ArrayList<Movie>, this)
+        dataList.onActivityResult(requestCode,resultCode,resultData)
+        data = db.readMovies()
+        dataList = MovieAdapter(context, data as ArrayList<Movie>, this)
+        movieListView.adapter = dataList
+        Log.d("Main", "ON ACTIVITY RESULT MOVIES FRAGMENT")
+    }
     companion object {
         fun newInstance(): MoviesFragment = MoviesFragment()
     }
