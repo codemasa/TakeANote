@@ -198,6 +198,56 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         return list
     }
 
+    fun readFavoriteMovies() : MutableList<Movie>{
+        val list : MutableList<Movie> = ArrayList()
+        val db = this.readableDatabase
+        val query = "SELECT * FROM "  + MOVIE_TABLE + " WHERE favorite=?"
+        val result = db.rawQuery(query, arrayOf("1"))
+        if(result.moveToFirst()) {
+            do{
+                val movie = Movie()
+                movie.id = result.getString(result.getColumnIndex(COL_ID)).toInt()
+                movie.title = result.getString(result.getColumnIndex(COL_TITLE))
+                movie.director = result.getString(result.getColumnIndex(COL_DIRECTOR))
+                movie.releaseDate = result.getString(result.getColumnIndex(COL_RELEASE_DATE)).toInt()
+                movie.favorite = result.getInt(result.getColumnIndex(COL_FAVORITE)) > 0
+                movie.imageURL = result.getString(result.getColumnIndex(COL_THUMBNAIL))
+
+                list.add(movie)
+
+            }while (result.moveToNext())
+        }
+        result.close()
+        db.close()
+
+        return list
+    }
+
+    fun readFavoriteTVShows() : MutableList<TVShow>{
+        val list : MutableList<TVShow> = ArrayList()
+        val db = this.readableDatabase
+        val query = "SELECT * FROM "  + TV_TABLE + " WHERE favorite=?"
+        val result = db.rawQuery(query, arrayOf("1"))
+        if(result.moveToFirst()) {
+            do{
+                var tvShow = TVShow()
+                tvShow.id = result.getString(result.getColumnIndex(COL_ID)).toInt()
+                tvShow.title = result.getString(result.getColumnIndex(COL_TITLE))
+                tvShow.season = result.getString(result.getColumnIndex(COL_SEASON)).toInt()
+                tvShow.releaseDate = result.getString(result.getColumnIndex(COL_RELEASE_DATE)).toInt()
+                tvShow.favorite = result.getInt(result.getColumnIndex(COL_FAVORITE)) > 0
+                tvShow.imageURL = result.getString(result.getColumnIndex(COL_THUMBNAIL))
+
+                list.add(tvShow)
+
+            }while (result.moveToNext())
+        }
+        result.close()
+        db.close()
+
+        return list
+    }
+
     fun readAlbums() : MutableList<Album>{
         val list : MutableList<Album> = ArrayList()
         val db = this.readableDatabase
@@ -244,6 +294,10 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         db.close()
         return list
     }
+
+
+
+
 
     fun deleteMovie(id : Int) {
         val db = this.writableDatabase
@@ -422,6 +476,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         db.close()
         return false
     }
+
 
 
 }
