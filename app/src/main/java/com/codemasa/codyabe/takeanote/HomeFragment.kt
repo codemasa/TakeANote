@@ -85,21 +85,26 @@ class HomeFragment : Fragment(), OnStartDragListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
         super.onActivityResult(requestCode, resultCode, resultData)
         db = DatabaseHelper(context)
-        movieData = db.readMovies()
-        movieDataList = MovieAdapter(context, movieData as ArrayList<Movie>, this)
-        movieDataList.onActivityResult(requestCode,resultCode,resultData)
-        movieData = db.readMovies()
-        movieDataList = MovieAdapter(context, movieData as ArrayList<Movie>, this)
-        movieListView.adapter = movieDataList
-        Log.d("Main", "ON ACTIVITY RESULT MOVIES FRAGMENT")
-
-        tvData = db.readTVShows()
-        tvDataList = TVShowAdapter(context, tvData as ArrayList<TVShow>, this)
-        tvDataList.onActivityResult(requestCode,resultCode,resultData)
-        tvData = db.readTVShows()
-        tvDataList = TVShowAdapter(context, tvData as ArrayList<TVShow>, this)
-        tvShowListView.adapter = tvDataList
-        Log.d("Main", "ON ACTIVITY RESULT MOVIES FRAGMENT")
+        when(resultData!!.getStringExtra("category")) {
+            "movie" -> {
+                movieData = db.readMovies()
+                movieDataList = MovieAdapter(context, movieData as ArrayList<Movie>, this)
+                movieDataList.onActivityResult(requestCode, resultCode, resultData)
+                movieData = db.readMovies()
+                movieDataList = MovieAdapter(context, movieData as ArrayList<Movie>, this)
+                movieListView.adapter = movieDataList
+                Log.d("Main", "ON ACTIVITY RESULT MOVIES FRAGMENT")
+            }
+            "tvShow" -> {
+                tvData = db.readTVShows()
+                tvDataList = TVShowAdapter(context, tvData as ArrayList<TVShow>, this)
+                tvDataList.onActivityResult(requestCode, resultCode, resultData)
+                tvData = db.readTVShows()
+                tvDataList = TVShowAdapter(context, tvData as ArrayList<TVShow>, this)
+                tvShowListView.adapter = tvDataList
+                Log.d("Main", "ON ACTIVITY RESULT MOVIES FRAGMENT")
+            }
+        }
 
     }
 

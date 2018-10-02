@@ -14,6 +14,7 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.squareup.picasso.Picasso
+import org.json.JSONException
 import java.util.*
 
 
@@ -108,9 +109,14 @@ class TVShowAdapter(private val context: Context,
             requestQueue = Volley.newRequestQueue(context)
             val APIRequest = JsonObjectRequest(Request.Method.GET, imdbURL, null,
                     Response.Listener { response ->
-                        APIResponse = response.getString("imdbID")
-                        Picasso.get().load("http://img.omdbapi.com/?i=" + APIResponse + "&h=600&apikey=" + APIKey).into(holder.thumbnail)
-
+                        try {
+                            APIResponse = response.getString("imdbID")
+                            Picasso.get().load("http://img.omdbapi.com/?i=" + APIResponse + "&h=600&apikey=" + APIKey).into(holder.thumbnail)
+                        }
+                        catch (e : JSONException){
+                            holder.thumbnail.setBackgroundColor(context.getColor(R.color.ripple_material_light))
+                            holder.thumbnail.setImageResource(R.drawable.ic_add)
+                        }
                     },
                     Response.ErrorListener { error ->
 

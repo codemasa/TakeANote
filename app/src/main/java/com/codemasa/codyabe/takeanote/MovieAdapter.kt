@@ -128,7 +128,7 @@ class MovieAdapter(private val context: Context,
                     Response.ErrorListener { error ->
                     }
             )
-            requestQueue.add(APIRequest)
+            requestQueue.add    (APIRequest)
         }
         else{
             holder.thumbnail.setImageURI(Uri.parse(movie.imageURL))
