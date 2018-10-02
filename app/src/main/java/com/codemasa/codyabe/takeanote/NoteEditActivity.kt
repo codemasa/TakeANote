@@ -149,14 +149,23 @@ class NoteEditActivity : AppCompatActivity() {
                         val db = DatabaseHelper(context)
                         val tvShow = TVShow(titleInputText.text.toString(), directorInputText.text.toString().toInt(), yearInputText.text.toString().toInt(), imageURL)
                         if (intent.getStringExtra("type") == "edit") {
-                            db.updateTVShow(tvShow.title, tvShow.season, tvShow.releaseDate, tvShow.imageURL)
+                            val resultIntent = Intent()
+                            resultIntent.putExtra("category", "tvShow")
+                            resultIntent.putExtra("id", intent.getIntExtra("id",0))
+                            resultIntent.putExtra("title", titleInputText.text.toString())
+                            resultIntent.putExtra("season", directorInputText.text.toString().toInt())
+                            resultIntent.putExtra("year", yearInputText.text.toString().toInt())
+                            resultIntent.putExtra("imageURL", imageURL)
+                            setResult(Activity.RESULT_OK, resultIntent)
+                            finish()
                         } else {
+                            val resultIntent = Intent()
+                            resultIntent.putExtra("category", "tvShow")
+                            setResult(Activity.RESULT_OK, resultIntent)
+                            finish()
                             db.insertData(tvShow)
                         }
-                        val resultIntent = Intent()
-                        resultIntent.putExtra("category", "tvShow")
-                        setResult(Activity.RESULT_OK, resultIntent)
-                        finish()
+
                     }
                 }
                 getString(R.string.music_category) -> {

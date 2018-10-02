@@ -337,21 +337,19 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         db.close()
     }
 
-    fun updateTVShow(title: String?, season: Int?, year: Int?, imageURL : String?){
+    fun updateTVShow(title: String?, season: Int?, year: Int?, imageURL : String?, id: Int){
         val db = this.writableDatabase
         val query = "SELECT * FROM "  + TV_TABLE
         val result = db.rawQuery(query, null)
-        if(result.moveToFirst()) {
-            do{
-                val cv = ContentValues()
-                cv.put(COL_TITLE, if(!title.isNullOrBlank()) title  else result.getString(result.getColumnIndex(COL_TITLE)))
-                cv.put(COL_SEASON, if(season != null) season  else result.getInt(result.getColumnIndex(COL_SEASON)))
-                cv.put(COL_RELEASE_DATE, if(year != null) year  else result.getInt(result.getColumnIndex(COL_RELEASE_DATE)))
-                cv.put(COL_THUMBNAIL, if(!imageURL.isNullOrBlank()) imageURL else result.getString(result.getColumnIndex(COL_THUMBNAIL)))
-                db.update(TV_TABLE, cv, COL_ID+"=?", arrayOf(result.getString(result.getColumnIndex(COL_ID))))
 
-            }while (result.moveToNext())
-        }
+        val cv = ContentValues()
+        cv.put(COL_TITLE, if(!title.isNullOrBlank()) title  else result.getString(result.getColumnIndex(COL_TITLE)))
+        cv.put(COL_SEASON, if(season != null) season  else result.getInt(result.getColumnIndex(COL_SEASON)))
+        cv.put(COL_RELEASE_DATE, if(year != null) year  else result.getInt(result.getColumnIndex(COL_RELEASE_DATE)))
+        cv.put(COL_THUMBNAIL, if(!imageURL.isNullOrBlank()) imageURL else result.getString(result.getColumnIndex(COL_THUMBNAIL)))
+        db.update(TV_TABLE, cv, COL_ID+"=?", arrayOf(id.toString()))
+
+
         result.close()
         db.close()
     }
@@ -446,17 +444,16 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
 
     }
 
-    fun findTVShow(tvShow : TVShow) : Boolean{
+    fun findTVShow(title : String) : Int{
         val db = this.readableDatabase
-        val query = "SELECT * FROM %s WHERE title = \"%s\"".format(TV_TABLE, tvShow.title)
-        val result = db.rawQuery(query, null)
-        if (result != null) {
-            result.close()
-            db.close()
-            return true
-        }
+        val query = "SELECT " + COL_ID + " FROM " + TV_TABLE + " WHERE title =?"
+        val result = db.rawQuery(query, arrayOf(title))
+        result.moveToFirst()
+        val id = result.getInt(0)
+        result.close()
         db.close()
-        return false
+        return id
+
     }
 
     fun findAlbum(album: Album) : Boolean{

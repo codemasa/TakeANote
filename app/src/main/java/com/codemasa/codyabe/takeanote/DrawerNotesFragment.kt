@@ -108,7 +108,7 @@ class DrawerNotesFragment : Fragment() {
                     } else {
                         when (data!!.getStringExtra("category")) {
                             "movie" -> moviesFragment.onActivityResult(requestCode,resultCode,data)
-                            "tvShow" -> tvShowFragment.onSave()
+                            "tvShow" -> tvShowFragment.onActivityResult(requestCode,resultCode,data)
                         }
                     }
                 }

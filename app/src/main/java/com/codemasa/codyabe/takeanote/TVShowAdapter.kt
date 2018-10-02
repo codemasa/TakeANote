@@ -19,6 +19,8 @@ import java.util.*
 
 class TVShowAdapter(private val context: Context,
                     private val dataSource: ArrayList<TVShow>, dragStartListener : OnStartDragListener) : RecyclerView.Adapter<TVShowAdapter.ViewHolder>(), ItemTouchHelperAdapter{
+
+
     override fun onItemMove(fromPosition: Int, toPosition: Int) {
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
@@ -32,6 +34,8 @@ class TVShowAdapter(private val context: Context,
         notifyItemMoved(fromPosition, toPosition)
     }
 
+
+    internal lateinit var tvShow: TVShow
     val dragStartListener : OnStartDragListener
     init{
         this.dragStartListener = dragStartListener
@@ -48,7 +52,7 @@ class TVShowAdapter(private val context: Context,
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val tvShow : TVShow = getItem(position) as TVShow
+        tvShow = getItem(position) as TVShow
 
         val favoriteStar : ImageView = holder.itemView.findViewById(R.id.favorite_tv_show)
         if(tvShow.favorite){
@@ -78,7 +82,7 @@ class TVShowAdapter(private val context: Context,
 
         vertMoreButton.setOnClickListener {
             Toast.makeText(context, "More Options", Toast.LENGTH_LONG).show()
-            showMoreOptionsMenu(it,tvShow)
+            showMoreOptionsMenu(it,tvShow, position)
         }
 
         holder.itemView.setOnClickListener { view ->
@@ -136,7 +140,7 @@ class TVShowAdapter(private val context: Context,
 
 
 
-    fun showMoreOptionsMenu(view : View, tvShow: TVShow){
+    fun showMoreOptionsMenu(view : View, tvShow: TVShow, position: Int){
         val moreOptionsMenu : PopupMenu = PopupMenu(context, view)
 
         moreOptionsMenu.setOnMenuItemClickListener{item ->
@@ -150,6 +154,7 @@ class TVShowAdapter(private val context: Context,
                     true
                 }
                 R.id.popup_delete -> {
+                    val tvShow = dataSource[position]
                     dataSource.remove(tvShow)
                     db.deleteTVShow(tvShow.id)
                     this.notifyDataSetChanged()
@@ -157,12 +162,13 @@ class TVShowAdapter(private val context: Context,
                 }
                 R.id.popup_edit -> {
                     val intent = NoteEditActivity.newIntent(context)
+                    intent.putExtra("id", tvShow.id)
                     intent.putExtra("title", tvShow.title)
                     intent.putExtra("director", tvShow.season)
                     intent.putExtra("year", tvShow.releaseDate)
                     intent.putExtra("imageURL", tvShow.imageURL)
                     intent.putExtra("type", "edit")
-                    context.startActivity(intent)
+                    (context as MainActivity).startActivityForResult(intent,2)
 
                     true
                 }
@@ -189,6 +195,13 @@ class TVShowAdapter(private val context: Context,
             moreOptionsMenu.show()
         }
 
+    }
+
+    fun onActivityResult(resultCode: Int, requestCode: Int, data: Intent?){
+        Log.d("Main", "ON ACTIVITY RESULT MOVIES ADAPTER")
+        val db = DatabaseHelper(context)
+        db.updateTVShow(data!!.getStringExtra("title"), data.getIntExtra("season",0), data.getIntExtra("year",0), data.getStringExtra("imageURL"), data.getIntExtra("id",0))
+        notifyDataSetChanged()
     }
 
     public class ViewHolder : RecyclerView.ViewHolder {
