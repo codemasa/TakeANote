@@ -42,6 +42,7 @@
     <string name="image_add">image add</string>
     <string name="season">Season: %d</string>
     <string name="rearrange_button">rearrange button</string>
+    <string name="clear_image">clear image</string>
     <string-array name="category_array">
         <item>@string/movie_category</item>
         <item>@string/tv_category</item>

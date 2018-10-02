@@ -3,6 +3,7 @@ package com.codemasa.codyabe.takeanote
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.renderscript.ScriptGroup
@@ -25,6 +26,7 @@ import android.view.inputmethod.InputMethodManager
 import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
 import android.widget.*
 import kotlinx.android.synthetic.main.activity_note_edit.*
+import kotlinx.android.synthetic.main.nav_header.view.*
 
 
 class NoteEditActivity : AppCompatActivity() {
@@ -34,6 +36,7 @@ class NoteEditActivity : AppCompatActivity() {
     internal lateinit var categorySpinner : AppCompatSpinner
     internal lateinit var saveButton: Button
     internal lateinit var imageAddButton : ImageButton
+    internal lateinit var imageClearButton : ImageButton
     internal var imageURL: String = ""
 
     companion object {
@@ -47,6 +50,7 @@ class NoteEditActivity : AppCompatActivity() {
         var DIRECTOR_KEY = ""
         var YEAR_KEY = ""
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,19 +100,34 @@ class NoteEditActivity : AppCompatActivity() {
 
         imageAddButton = findViewById(R.id.image_add_button)
         imageAddButton.setOnClickListener {
+
             val pickPhoto = Intent(Intent.ACTION_OPEN_DOCUMENT,
                     android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(pickPhoto, 1)
         }
 
+        imageClearButton = findViewById(R.id.clear_image_button)
+        imageClearButton.setOnClickListener{view ->
+            imageAddButton.setImageResource(R.drawable.ic_add)
+            view.refreshDrawableState()
+            imageURL = ""
+        }
+
         val context = this
 
         val intent = intent
-        if (intent.getStringExtra("type") == "edit"){
+        if (intent.getStringExtra("type") == "edit") {
             titleInputText.setText(intent.getStringExtra("title"))
             directorInputText.setText(intent.getStringExtra("director"))
-            yearInputText.setText(intent.getIntExtra("year",0).toString())
+            yearInputText.setText(intent.getIntExtra("year", 0).toString())
             imageURL = intent.getStringExtra("imageURL")
+            if (imageURL == "") {
+                imageAddButton.setImageResource(R.drawable.ic_add)
+
+            }
+            else{
+                imageAddButton.setImageURI(Uri.parse(imageURL))
+            }
 
         }
 
@@ -202,17 +221,18 @@ class NoteEditActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, imageReturnedIntent: Intent) {
         super.onActivityResult(requestCode, resultCode, imageReturnedIntent)
         when (requestCode) {
-            0 -> if (resultCode === Activity.RESULT_OK) {
+            0 -> if (resultCode == Activity.RESULT_OK) {
                 val selectedImage = imageReturnedIntent.getData()
                 imageAddButton.setImageURI(selectedImage)
                 imageURL = selectedImage.toString()
             }
-            1 -> if (resultCode === Activity.RESULT_OK) {
+            1 -> if (resultCode == Activity.RESULT_OK) {
                 val selectedImage = imageReturnedIntent.getData()
                 imageAddButton.setImageURI(selectedImage)
                 imageURL = selectedImage.toString()
             }
         }
+
     }
 
     fun hideKeyboard(view: View){

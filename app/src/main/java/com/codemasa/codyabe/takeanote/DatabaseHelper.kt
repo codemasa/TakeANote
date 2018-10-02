@@ -329,7 +329,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         cv.put(COL_TITLE, if(!title.isNullOrBlank()) title  else result.getString(result.getColumnIndex(COL_TITLE)))
         cv.put(COL_DIRECTOR, if(!director.isNullOrBlank()) director  else result.getString(result.getColumnIndex(COL_DIRECTOR)))
         cv.put(COL_RELEASE_DATE, if(year != null) year  else result.getInt(result.getColumnIndex(COL_RELEASE_DATE)))
-        cv.put(COL_THUMBNAIL, if(!imageURL.isNullOrBlank()) imageURL else result.getString(result.getColumnIndex(COL_THUMBNAIL)))
+        cv.put(COL_THUMBNAIL, if(!imageURL.isNullOrBlank()) imageURL else "")
         db.update(MOVIE_TABLE, cv, COL_ID+"=?", arrayOf(id.toString()))
 
 
@@ -346,7 +346,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         cv.put(COL_TITLE, if(!title.isNullOrBlank()) title  else result.getString(result.getColumnIndex(COL_TITLE)))
         cv.put(COL_SEASON, if(season != null) season  else result.getInt(result.getColumnIndex(COL_SEASON)))
         cv.put(COL_RELEASE_DATE, if(year != null) year  else result.getInt(result.getColumnIndex(COL_RELEASE_DATE)))
-        cv.put(COL_THUMBNAIL, if(!imageURL.isNullOrBlank()) imageURL else result.getString(result.getColumnIndex(COL_THUMBNAIL)))
+        cv.put(COL_THUMBNAIL, if(!imageURL.isNullOrBlank()) imageURL else "")
         db.update(TV_TABLE, cv, COL_ID+"=?", arrayOf(id.toString()))
 
 
