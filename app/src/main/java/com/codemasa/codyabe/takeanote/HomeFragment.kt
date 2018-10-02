@@ -2,11 +2,13 @@ package com.codemasa.codyabe.takeanote
 
 import android.content.ClipData
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -77,6 +79,27 @@ class HomeFragment : Fragment(), OnStartDragListener {
 
         movieListView.adapter = movieDataList
         tvShowListView.adapter = tvDataList
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, resultData: Intent?) {
+        super.onActivityResult(requestCode, resultCode, resultData)
+        db = DatabaseHelper(context)
+        movieData = db.readMovies()
+        movieDataList = MovieAdapter(context, movieData as ArrayList<Movie>, this)
+        movieDataList.onActivityResult(requestCode,resultCode,resultData)
+        movieData = db.readMovies()
+        movieDataList = MovieAdapter(context, movieData as ArrayList<Movie>, this)
+        movieListView.adapter = movieDataList
+        Log.d("Main", "ON ACTIVITY RESULT MOVIES FRAGMENT")
+
+        tvData = db.readTVShows()
+        tvDataList = TVShowAdapter(context, tvData as ArrayList<TVShow>, this)
+        tvDataList.onActivityResult(requestCode,resultCode,resultData)
+        tvData = db.readTVShows()
+        tvDataList = TVShowAdapter(context, tvData as ArrayList<TVShow>, this)
+        tvShowListView.adapter = tvDataList
+        Log.d("Main", "ON ACTIVITY RESULT MOVIES FRAGMENT")
 
     }
 
