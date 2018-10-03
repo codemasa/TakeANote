@@ -12,5 +12,5 @@ Add Movies
 ---
 Mark As Favorite
 ![alt text](https://github.com/codemasa/TakeANote/blob/master/ExampleImages/PopupMenu.png "Add Movies!")
-!(https://github.com/codemasa/TakeANote/blob/master/ExampleImages/Favorite.png "Add Movies!")
+![](https://github.com/codemasa/TakeANote/blob/master/ExampleImages/Favorite.png "Add Movies!")
 
