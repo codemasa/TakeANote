@@ -3,7 +3,7 @@
 
 Add Movies
 ![alt text](https://github.com/codemasa/TakeANote/blob/master/ExampleImages/AddMovie.png "Add Movies!" )
-(https://github.com/codemasa/TakeANote/blob/master/ExampleImages/MovieAdded.png "Add Movies!" )
+[](https://github.com/codemasa/TakeANote/blob/master/ExampleImages/MovieAdded.png "Add Movies!" )
 ---
 Add TV Shows
 ![alt text](https://github.com/codemasa/TakeANote/blob/master/ExampleImages/AddTVShow.png "Add TV Shows!" )
