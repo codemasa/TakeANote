@@ -11,6 +11,6 @@ Add Movies
 ![alt text](https://github.com/codemasa/TakeANote/blob/master/ExampleImages/AddMovie.png | width=100 "Add Movies!" )
 ---
 Mark As Favorite
-![alt text](https://github.com/codemasa/TakeANote/blob/master/ExampleImages/PopupMenu.png | width=100 | "Add Movies!")
+![alt text](https://github.com/codemasa/TakeANote/blob/master/ExampleImages/PopupMenu.png | width=100)
 ![](https://github.com/codemasa/TakeANote/blob/master/ExampleImages/Favorite.png | width=100 "Add Movies!" )
 
