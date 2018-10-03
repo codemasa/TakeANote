@@ -3,11 +3,11 @@
 
 Add Movies
 ![alt text](https://github.com/codemasa/TakeANote/blob/master/ExampleImages/AddMovie.png "Add Movies!" )
-[](https://github.com/codemasa/TakeANote/blob/master/ExampleImages/MovieAdded.png "Add Movies!" )
+[](https://github.com/codemasa/TakeANote/blob/master/ExampleImages/AddedMovie.png "Add Movies!" )
 ---
 Add TV Shows
 ![alt text](https://github.com/codemasa/TakeANote/blob/master/ExampleImages/AddTVShow.png "Add TV Shows!" )
-![](https://github.com/codemasa/TakeANote/blob/master/ExampleImages/TVShowAdded.png "Add TV Shows!" )
+![](https://github.com/codemasa/TakeANote/blob/master/ExampleImages/AddedTVShow.png "Add TV Shows!" )
 ---
 Change Image!
 ![alt text](https://github.com/codemasa/TakeANote/blob/master/ExampleImages/ChangeImage.png "Change Image")
