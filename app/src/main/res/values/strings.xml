@@ -45,6 +45,8 @@
     <string name="clear_image">clear image</string>
     <string name="theme_button">theme button</string>
     <string name="info_button">info button</string>
+    <string name="about_title">Version: %s</string>
+    <string name="about_message">Copyright 2018. Cody Masao</string>
     <string-array name="category_array">
         <item>@string/movie_category</item>
         <item>@string/tv_category</item>

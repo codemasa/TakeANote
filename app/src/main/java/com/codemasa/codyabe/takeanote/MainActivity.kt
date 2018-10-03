@@ -1,6 +1,7 @@
 package com.codemasa.codyabe.takeanote
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
@@ -20,6 +21,7 @@ import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ListView
 import android.widget.TextView
 import java.lang.reflect.Field
@@ -37,6 +39,7 @@ class MainActivity : AppCompatActivity() {
     internal lateinit var drawerSettingsFragment: DrawerSettingsFragment
     internal lateinit var drawerSearchFragment: DrawerSearchFragment
     internal lateinit var searchBar : SearchView
+    internal lateinit var infoButton : ImageButton
     companion object {
         var CURRENT_DRAWER_FRAGMENT_KEY = "CURRENT_DRAWER_FRAGMENT_KEY"
         var CURRENT_DRAWER_FRAGMENT_ID_KEY = "CURRENT_DRAWER_FRAGMENT_ID_KEY"
@@ -57,6 +60,11 @@ class MainActivity : AppCompatActivity() {
         searchBar = findViewById(R.id.media_search)
         searchBar.visibility = View.GONE
 
+
+        infoButton = findViewById(R.id.info_button)
+        infoButton.setOnClickListener {
+            showInfo()
+        }
 
 
         //setting the layout for the drawer layout
@@ -91,15 +99,15 @@ class MainActivity : AppCompatActivity() {
             // Add code here to update the UI based on the item selected
             // For example, swap UI fragments here
             when (menuItem.itemId){
-                R.id.nav_profile -> {
-                    currentFragmentID = R.id.nav_profile
-                    currentFragment = drawerProfileFragment
-                    openFragment(drawerProfileFragment)
-                    actionbar?.setTitle(R.string.take_a_note)
-                    searchBar.visibility = View.GONE
-                    searchBar.isIconified = true
-                    return@setNavigationItemSelectedListener true
-                }
+//                R.id.nav_profile -> {
+//                    currentFragmentID = R.id.nav_profile
+//                    currentFragment = drawerProfileFragment
+//                    openFragment(drawerProfileFragment)
+//                    actionbar?.setTitle(R.string.take_a_note)
+//                    searchBar.visibility = View.GONE
+//                    searchBar.isIconified = true
+//                    return@setNavigationItemSelectedListener true
+//                }
                 R.id.nav_notes -> {
                     currentFragmentID = R.id.nav_notes
 
@@ -121,38 +129,38 @@ class MainActivity : AppCompatActivity() {
 
                     return@setNavigationItemSelectedListener true
                 }
-                R.id.nav_backlog -> {
-                    currentFragmentID = R.id.nav_backlog
-
-                    currentFragment = drawerBacklogFragment
-                    openFragment(drawerBacklogFragment)
-                    actionbar?.setTitle(R.string.take_a_note)
-                    searchBar.visibility = View.GONE
-                    searchBar.isIconified = true
-
-                    return@setNavigationItemSelectedListener true
-                }
-                R.id.nav_search -> {
-                    currentFragmentID = R.id.nav_search
-                    currentFragment = drawerSearchFragment
-                    openFragment(drawerSearchFragment)
-                    actionbar?.title = ""
-                    searchBar.visibility = View.VISIBLE
-                    searchBar.isIconified = false
-
-                    return@setNavigationItemSelectedListener true
-                 }
-                R.id.nav_manage -> {
-                    currentFragmentID = R.id.nav_manage
-
-                    currentFragment = drawerSettingsFragment
-                    openFragment(drawerSettingsFragment)
-                    actionbar?.setTitle(R.string.take_a_note)
-                    searchBar.visibility = View.GONE
-                    searchBar.isIconified = true
-
-                    return@setNavigationItemSelectedListener true
-                }
+//                R.id.nav_backlog -> {
+//                    currentFragmentID = R.id.nav_backlog
+//
+//                    currentFragment = drawerBacklogFragment
+//                    openFragment(drawerBacklogFragment)
+//                    actionbar?.setTitle(R.string.take_a_note)
+//                    searchBar.visibility = View.GONE
+//                    searchBar.isIconified = true
+//
+//                    return@setNavigationItemSelectedListener true
+//                }
+//                R.id.nav_search -> {
+//                    currentFragmentID = R.id.nav_search
+//                    currentFragment = drawerSearchFragment
+//                    openFragment(drawerSearchFragment)
+//                    actionbar?.title = ""
+//                    searchBar.visibility = View.VISIBLE
+//                    searchBar.isIconified = false
+//
+//                    return@setNavigationItemSelectedListener true
+//                 }
+//                R.id.nav_manage -> {
+//                    currentFragmentID = R.id.nav_manage
+//
+//                    currentFragment = drawerSettingsFragment
+//                    openFragment(drawerSettingsFragment)
+//                    actionbar?.setTitle(R.string.take_a_note)
+//                    searchBar.visibility = View.GONE
+//                    searchBar.isIconified = true
+//
+//                    return@setNavigationItemSelectedListener true
+//                }
             }
 
 
@@ -256,6 +264,15 @@ class MainActivity : AppCompatActivity() {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.content_frame, fragment)
         transaction.commit()
+    }
+
+    private fun showInfo() {
+        val dialogTitle = getString(R.string.about_title, BuildConfig.VERSION_NAME)
+        val dialogMessage = getString(R.string.about_message)
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(dialogTitle)
+        builder.setMessage(dialogMessage)
+        builder.create().show()
     }
 
 
