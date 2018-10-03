@@ -10,11 +10,11 @@ Add TV Shows
 ![](https://github.com/codemasa/TakeANote/blob/master/ExampleImages/TVShowAdded.png "Add TV Shows!" )
 ---
 Change Image!
-![alt text](https://github.com/codemasa/TakeANote/blob/master/ExampleImages/ChangeImage.png "Change Image" 
+![alt text](https://github.com/codemasa/TakeANote/blob/master/ExampleImages/ChangeImage.png "Change Image")
 ![](https://github.com/codemasa/TakeANote/blob/master/ExampleImages/ImageChanged.png "Change Image" )
 
 ---
 Mark As Favorite
 ![alt text](https://github.com/codemasa/TakeANote/blob/master/ExampleImages/PopupMenu.png "Favorite them!")
-![](https://github.com/codemasa/TakeANote/blob/master/ExampleImages/Favorite.png | width=100)
+![](https://github.com/codemasa/TakeANote/blob/master/ExampleImages/Favorite.png)
 
