@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.media.Image
 import android.net.Uri
+import android.support.v4.app.ShareCompat
+import android.support.v4.view.MenuItemCompat
 import android.support.v4.view.MotionEventCompat
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -21,12 +23,15 @@ import org.json.JSONException
 import org.json.JSONObject
 import java.net.URI
 import java.util.*
+import android.widget.ShareActionProvider
+import kotlin.collections.ArrayList
 
 
 class MovieAdapter(private val context: Context,
                    private val dataSource: ArrayList<Movie>, dragListener: OnStartDragListener) : RecyclerView.Adapter<MovieAdapter.ViewHolder>(), ItemTouchHelperAdapter{
 
     internal lateinit var movie: Movie
+    internal var shareActionProvider: ShareActionProvider? = null
     internal var dragStartListener : OnStartDragListener
     init {
         this.dragStartListener = dragListener
@@ -187,6 +192,20 @@ class MovieAdapter(private val context: Context,
                     true
                 }
                 R.id.popup_share-> {
+                    val movie = dataSource[position]
+                    shareActionProvider = item.actionProvider as? ShareActionProvider
+                    val shareIntent = Intent(Intent.ACTION_SEND)
+                    val noteList = db.readNotes("movie", movie.title)
+                    val noteListString : StringBuilder = StringBuilder()
+                    for(note in noteList){
+                        noteListString.append(note.noteBody+"\n")
+
+                    }
+                    val extraText = noteListString.toString()
+                    shareIntent.setType("text/plain")
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, movie.title)
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, extraText)
+                    context.startActivity(Intent.createChooser(shareIntent,"Share Via..."))
 
                     true
                 }
@@ -195,7 +214,6 @@ class MovieAdapter(private val context: Context,
         }
 
         moreOptionsMenu.inflate(R.menu.more_options_menu)
-
         try {
             val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
             fieldMPopup.isAccessible = true

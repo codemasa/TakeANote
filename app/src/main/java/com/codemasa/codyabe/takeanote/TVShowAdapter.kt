@@ -37,6 +37,7 @@ class TVShowAdapter(private val context: Context,
 
 
     internal lateinit var tvShow: TVShow
+    internal var shareActionProvider : ShareActionProvider? = null
     val dragStartListener : OnStartDragListener
     init{
         this.dragStartListener = dragStartListener
@@ -179,7 +180,20 @@ class TVShowAdapter(private val context: Context,
                     true
                 }
                 R.id.popup_share-> {
+                    val tvShow = dataSource[position]
+                    shareActionProvider = item.actionProvider as? ShareActionProvider
+                    val shareIntent = Intent(Intent.ACTION_SEND)
+                    val noteList = db.readNotes("movie", tvShow.title)
+                    val noteListString : StringBuilder = StringBuilder()
+                    for(note in noteList){
+                        noteListString.append(note.noteBody+"\n")
 
+                    }
+                    val extraText = noteListString.toString()
+                    shareIntent.setType("text/plain")
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, tvShow.title)
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, extraText)
+                    context.startActivity(Intent.createChooser(shareIntent,"Share Via..."))
                     true
                 }
                 else -> false

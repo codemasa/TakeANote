@@ -18,7 +18,9 @@
             android:id="@+id/popup_share"
             android:checkable="false"
             android:icon="@drawable/ic_share"
-            android:title="@string/share" />
+            android:title="@string/share"
+            app:actionProviderClass="android.widget.ShareActionProvider"
+            app:showAsAction="always"/>
         <item
             android:id="@+id/popup_delete"
             android:checkable="false"
