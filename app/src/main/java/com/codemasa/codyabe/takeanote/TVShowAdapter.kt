@@ -104,26 +104,7 @@ class TVShowAdapter(private val context: Context,
         holder.seasonTextView.text = context.getString(R.string.season).format(tvShow.season)
         holder.yearTextView.text = tvShow.releaseDate.toString()
         if(tvShow.imageURL == "") {
-            val APIKey = BuildConfig.ApiKey
-            val imdbURL = "http://omdbapi.com/?t=" + tvShow.title + "&apikey=" + APIKey
-            var APIResponse: String = ""
-            requestQueue = Volley.newRequestQueue(context)
-            val APIRequest = JsonObjectRequest(Request.Method.GET, imdbURL, null,
-                    Response.Listener { response ->
-                        try {
-                            APIResponse = response.getString("imdbID")
-                            Picasso.get().load("http://img.omdbapi.com/?i=" + APIResponse + "&h=600&apikey=" + APIKey).into(holder.thumbnail)
-                        }
-                        catch (e : JSONException){
-                            holder.thumbnail.setBackgroundColor(context.getColor(R.color.ripple_material_light))
-                            holder.thumbnail.setImageResource(R.drawable.ic_add)
-                        }
-                    },
-                    Response.ErrorListener { error ->
-
-                    }
-            )
-            requestQueue.add(APIRequest)
+            
         }else {
             holder.thumbnail.setImageURI(Uri.parse(tvShow.imageURL))
         }
