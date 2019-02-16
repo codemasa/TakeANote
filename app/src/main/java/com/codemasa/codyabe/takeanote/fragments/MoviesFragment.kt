@@ -1,4 +1,4 @@
-package com.codemasa.codyabe.takeanote
+package com.codemasa.codyabe.takeanote.fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,7 +8,13 @@ import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
 import android.util.Log
 import android.view.*
-import android.widget.*
+import com.codemasa.codyabe.takeanote.*
+import com.codemasa.codyabe.takeanote.adapters.MovieAdapter
+import com.codemasa.codyabe.takeanote.helpers.ItemTouchHelperAdapter
+import com.codemasa.codyabe.takeanote.helpers.ItemTouchHelperCallback
+import com.codemasa.codyabe.takeanote.listeners.OnStartDragListener
+import com.codemasa.codyabe.takeanote.model.DatabaseHelper
+import com.codemasa.codyabe.takeanote.model.Movie
 
 class MoviesFragment : Fragment(), OnStartDragListener {
 

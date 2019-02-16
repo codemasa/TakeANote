@@ -1,9 +1,12 @@
-package com.codemasa.codyabe.takeanote
+package com.codemasa.codyabe.takeanote.adapters
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.codemasa.codyabe.takeanote.model.Note
+import com.codemasa.codyabe.takeanote.holders.NoteHolder
+import com.codemasa.codyabe.takeanote.R
 
 
 class NoteListAdapter(private val context: Context, private val messageList: List<Note>) : RecyclerView.Adapter<NoteHolder>()
@@ -15,7 +18,7 @@ class NoteListAdapter(private val context: Context, private val messageList: Lis
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): NoteHolder? {
         val view = inflater.inflate(R.layout.list_item_note_added, parent, false)
 
-        return NoteHolder(context,view)
+        return NoteHolder(context, view)
 
 
     }

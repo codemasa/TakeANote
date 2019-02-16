@@ -1,4 +1,4 @@
-package com.codemasa.codyabe.takeanote
+package com.codemasa.codyabe.takeanote.model
 
 import android.content.ContentValues
 import android.content.Context
@@ -33,7 +33,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
 
 
     override fun onCreate(db: SQLiteDatabase?) {
-        var createMovieTable = "CREATE TABLE "  +  MOVIE_TABLE + " (" +
+        var createMovieTable = "CREATE TABLE "  + MOVIE_TABLE + " (" +
                 COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_TITLE + " VARCHAR(256), " +
                 COL_DIRECTOR + " VARCHAR(256), " +
@@ -41,7 +41,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
                 COL_THUMBNAIL + " VARCHAR(256), " +
                 COL_FAVORITE + " BOOLEAN);"
 
-        var createTVTable = "CREATE TABLE "  +  TV_TABLE + " (" +
+        var createTVTable = "CREATE TABLE "  + TV_TABLE + " (" +
                 COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_TITLE + " VARCHAR(256), " +
                 COL_SEASON + " INTEGER, " +
@@ -50,7 +50,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
                 COL_FAVORITE + " BOOLEAN);"
 
 
-        var createAlbumTable = "CREATE TABLE "  +  ALBUM_TABLE + " (" +
+        var createAlbumTable = "CREATE TABLE "  + ALBUM_TABLE + " (" +
                 COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_TITLE + " VARCHAR(256), " +
                 COL_ARTIST + " VARCHAR(256), " +
@@ -58,7 +58,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
                 COL_THUMBNAIL + " VARCHAR(256), " +
                 COL_FAVORITE + " BOOLEAN);"
 
-        var createNoteTable = "CREATE TABLE "  +  NOTE_TABLE + " (" +
+        var createNoteTable = "CREATE TABLE "  + NOTE_TABLE + " (" +
                 COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COL_NOTE + " VARCHAR(256), " +
                 COL_CATEGORY + " VARCHAR(256), " +
@@ -131,7 +131,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
 
     }
 
-    fun insertNote(note:Note){
+    fun insertNote(note: Note){
         val db = this.writableDatabase
         val cv = ContentValues()
         cv.put(COL_NOTE, note.noteBody)
@@ -302,21 +302,21 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
     fun deleteMovie(id : Int) {
         val db = this.writableDatabase
 
-        db.delete(MOVIE_TABLE, COL_ID+"=?", arrayOf(id.toString()))
+        db.delete(MOVIE_TABLE, COL_ID +"=?", arrayOf(id.toString()))
         db.close()
     }
 
     fun deleteTVShow(id : Int) {
         val db = this.writableDatabase
 
-        db.delete(TV_TABLE, COL_ID+"=?", arrayOf(id.toString()))
+        db.delete(TV_TABLE, COL_ID +"=?", arrayOf(id.toString()))
         db.close()
     }
 
     fun deleteAlbum(id : Int) {
         val db = this.writableDatabase
 
-        db.delete(ALBUM_TABLE, COL_ID+"=?", arrayOf(id.toString()))
+        db.delete(ALBUM_TABLE, COL_ID +"=?", arrayOf(id.toString()))
         db.close()
     }
 
@@ -330,7 +330,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         cv.put(COL_DIRECTOR, if(!director.isNullOrBlank()) director  else result.getString(result.getColumnIndex(COL_DIRECTOR)))
         cv.put(COL_RELEASE_DATE, if(year != null) year  else result.getInt(result.getColumnIndex(COL_RELEASE_DATE)))
         cv.put(COL_THUMBNAIL, if(!imageURL.isNullOrBlank()) imageURL else "")
-        db.update(MOVIE_TABLE, cv, COL_ID+"=?", arrayOf(id.toString()))
+        db.update(MOVIE_TABLE, cv, COL_ID +"=?", arrayOf(id.toString()))
 
 
         result.close()
@@ -347,7 +347,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         cv.put(COL_SEASON, if(season != null) season  else result.getInt(result.getColumnIndex(COL_SEASON)))
         cv.put(COL_RELEASE_DATE, if(year != null) year  else result.getInt(result.getColumnIndex(COL_RELEASE_DATE)))
         cv.put(COL_THUMBNAIL, if(!imageURL.isNullOrBlank()) imageURL else "")
-        db.update(TV_TABLE, cv, COL_ID+"=?", arrayOf(id.toString()))
+        db.update(TV_TABLE, cv, COL_ID +"=?", arrayOf(id.toString()))
 
 
         result.close()
@@ -366,7 +366,7 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
                 cv.put(COL_RELEASE_DATE, if(year != null) year  else result.getInt(result.getColumnIndex(COL_RELEASE_DATE)))
                 cv.put(COL_THUMBNAIL, if(!imageURL.isNullOrBlank()) imageURL else result.getString(result.getColumnIndex(COL_THUMBNAIL)))
 
-                db.update(ALBUM_TABLE, cv, COL_ID+"=?", arrayOf(result.getString(result.getColumnIndex(COL_ID))))
+                db.update(ALBUM_TABLE, cv, COL_ID +"=?", arrayOf(result.getString(result.getColumnIndex(COL_ID))))
 
             }while (result.moveToNext())
         }
@@ -381,12 +381,12 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         if (movie.favorite == false) {
             val cv = ContentValues()
             cv.put(COL_FAVORITE, true)
-            db.update(MOVIE_TABLE, cv, COL_ID+"=?", arrayOf(movie.id.toString()))
+            db.update(MOVIE_TABLE, cv, COL_ID +"=?", arrayOf(movie.id.toString()))
         }
         else {
             val cv = ContentValues()
             cv.put(COL_FAVORITE, false)
-            db.update(MOVIE_TABLE, cv, COL_ID+"=?", arrayOf(movie.id.toString()))
+            db.update(MOVIE_TABLE, cv, COL_ID +"=?", arrayOf(movie.id.toString()))
         }
         result.close()
         db.close()
@@ -399,12 +399,12 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
         if (tvShow.favorite == false) {
             val cv = ContentValues()
             cv.put(COL_FAVORITE, true)
-            db.update(TV_TABLE, cv, COL_ID+"=?", arrayOf(tvShow.id.toString()))
+            db.update(TV_TABLE, cv, COL_ID +"=?", arrayOf(tvShow.id.toString()))
         }
         else {
             val cv = ContentValues()
             cv.put(COL_FAVORITE, false)
-            db.update(TV_TABLE, cv, COL_ID+"=?", arrayOf(tvShow.id.toString()))
+            db.update(TV_TABLE, cv, COL_ID +"=?", arrayOf(tvShow.id.toString()))
         }
         result.close()
         db.close()
@@ -419,12 +419,12 @@ class DatabaseHelper(var context: Context) : SQLiteOpenHelper(context, DATABASE_
                 if (album.favorite == false) {
                     val cv = ContentValues()
                     cv.put(COL_FAVORITE, true)
-                    db.update(ALBUM_TABLE, cv, COL_ID+"=?", arrayOf(album.id.toString()))
+                    db.update(ALBUM_TABLE, cv, COL_ID +"=?", arrayOf(album.id.toString()))
                 }
                 else {
                     val cv = ContentValues()
                     cv.put(COL_FAVORITE, false)
-                    db.update(ALBUM_TABLE, cv, COL_ID+"=?", arrayOf(album.id.toString()))
+                    db.update(ALBUM_TABLE, cv, COL_ID +"=?", arrayOf(album.id.toString()))
                 }
             }while (result.moveToNext())
         }

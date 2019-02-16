@@ -1,4 +1,4 @@
-package com.codemasa.codyabe.takeanote
+package com.codemasa.codyabe.takeanote.adapters
 
 import android.content.Context
 import android.util.Log
@@ -9,6 +9,10 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import com.codemasa.codyabe.takeanote.*
+import com.codemasa.codyabe.takeanote.activities.NoteEditActivity
+import com.codemasa.codyabe.takeanote.model.DatabaseHelper
+import com.codemasa.codyabe.takeanote.model.Movie
 import com.squareup.picasso.Picasso
 
 
@@ -87,7 +91,7 @@ class AlbumAdapter(private val context: Context,
         return rowView
     }
 
-    fun showMoreOptionsMenu(view : View, movie:Movie){
+    fun showMoreOptionsMenu(view : View, movie: Movie){
         val moreOptionsMenu : PopupMenu = PopupMenu(context, view)
 
         moreOptionsMenu.setOnMenuItemClickListener{item ->
@@ -110,7 +114,7 @@ class AlbumAdapter(private val context: Context,
 
                     true
                 }
-                R.id.popup_share-> {
+                R.id.popup_share -> {
 
                     true
                 }

@@ -1,4 +1,4 @@
-package com.codemasa.codyabe.takeanote
+package com.codemasa.codyabe.takeanote.model
 
 import java.sql.Date
 

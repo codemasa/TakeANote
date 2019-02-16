@@ -1,6 +1,5 @@
-package com.codemasa.codyabe.takeanote
+package com.codemasa.codyabe.takeanote.fragments
 
-import android.content.ClipData
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -11,7 +10,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ListView
+import com.codemasa.codyabe.takeanote.*
+import com.codemasa.codyabe.takeanote.adapters.TVShowAdapter
+import com.codemasa.codyabe.takeanote.helpers.ItemTouchHelperAdapter
+import com.codemasa.codyabe.takeanote.helpers.ItemTouchHelperCallback
+import com.codemasa.codyabe.takeanote.listeners.OnStartDragListener
+import com.codemasa.codyabe.takeanote.model.DatabaseHelper
+import com.codemasa.codyabe.takeanote.model.TVShow
 
 class TVShowFragment : Fragment(), OnStartDragListener {
 

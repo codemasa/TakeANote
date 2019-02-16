@@ -1,6 +1,5 @@
-package com.codemasa.codyabe.takeanote
+package com.codemasa.codyabe.takeanote.fragments
 
-import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
@@ -11,6 +10,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.codemasa.codyabe.takeanote.activities.NoteEditActivity
+import com.codemasa.codyabe.takeanote.R
 
 class DrawerNotesFragment : Fragment() {
     internal lateinit var mBottomNav: BottomNavigationView

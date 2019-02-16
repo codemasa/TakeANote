@@ -1,32 +1,25 @@
-package com.codemasa.codyabe.takeanote
+package com.codemasa.codyabe.takeanote.activities
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.renderscript.ScriptGroup
-import android.support.constraint.ConstraintLayout
-import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.AppCompatEditText
-import android.support.design.widget.TextInputLayout
-import android.support.v4.app.NavUtils
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.AppCompatSpinner
-import android.support.v7.widget.SearchView
 import android.support.v7.widget.Toolbar
 import android.text.InputType
-import android.text.method.Touch
-import android.view.ContextMenu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
 import android.widget.*
-import kotlinx.android.synthetic.main.activity_note_edit.*
-import kotlinx.android.synthetic.main.nav_header.view.*
+import com.codemasa.codyabe.takeanote.*
+import com.codemasa.codyabe.takeanote.model.Album
+import com.codemasa.codyabe.takeanote.model.DatabaseHelper
+import com.codemasa.codyabe.takeanote.model.Movie
+import com.codemasa.codyabe.takeanote.model.TVShow
 
 
 class NoteEditActivity : AppCompatActivity() {
@@ -192,7 +185,7 @@ class NoteEditActivity : AppCompatActivity() {
                             directorInputText.text.isNotBlank() &&
                             yearInputText.text.isNotBlank()) {
                         val db = DatabaseHelper(context)
-                        val album = Album(titleInputText.text.toString(), directorInputText.text.toString(), yearInputText.text.toString().toInt(),imageURL)
+                        val album = Album(titleInputText.text.toString(), directorInputText.text.toString(), yearInputText.text.toString().toInt(), imageURL)
                         if (intent.getStringExtra("type") == "edit") {
                             db.updateAlbum(album.title, album.artist, album.releaseDate, album.imageURL)
                         } else {

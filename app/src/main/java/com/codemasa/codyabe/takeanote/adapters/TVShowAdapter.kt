@@ -1,41 +1,27 @@
-package com.codemasa.codyabe.takeanote
+package com.codemasa.codyabe.takeanote.adapters
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.media.Image
 import android.net.Uri
-import android.support.v4.app.ShareCompat
-import android.support.v4.view.MenuItemCompat
-import android.support.v4.view.MotionEventCompat
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.*
 import android.view.animation.AnimationUtils
 import android.widget.*
-import com.android.volley.Request
 import com.android.volley.RequestQueue
-import com.android.volley.Response
-import com.android.volley.toolbox.JsonObjectRequest
-import com.android.volley.toolbox.Volley
-import com.squareup.picasso.Picasso
-import org.json.JSONException
-import org.json.JSONObject
-import java.net.URI
+import com.codemasa.codyabe.takeanote.*
+import com.codemasa.codyabe.takeanote.activities.MainActivity
+import com.codemasa.codyabe.takeanote.activities.NoteEditActivity
+import com.codemasa.codyabe.takeanote.activities.NoteTakingActivity
+import com.codemasa.codyabe.takeanote.helpers.ItemTouchHelperAdapter
+import com.codemasa.codyabe.takeanote.listeners.OnStartDragListener
+import com.codemasa.codyabe.takeanote.model.DatabaseHelper
+import com.codemasa.codyabe.takeanote.model.TVShow
 import java.util.*
-import android.widget.ShareActionProvider
-import kotlin.collections.ArrayList
 
 
-class MovieAdapter(private val context: Context,
-                   private val dataSource: ArrayList<Movie>, dragListener: OnStartDragListener) : RecyclerView.Adapter<MovieAdapter.ViewHolder>(), ItemTouchHelperAdapter{
-
-    internal lateinit var movie: Movie
-    internal var shareActionProvider: ShareActionProvider? = null
-    internal var dragStartListener : OnStartDragListener
-    init {
-        this.dragStartListener = dragListener
-    }
+class TVShowAdapter(private val context: Context,
+                    private val dataSource: ArrayList<TVShow>, dragStartListener : OnStartDragListener) : RecyclerView.Adapter<TVShowAdapter.ViewHolder>(), ItemTouchHelperAdapter {
 
 
     override fun onItemMove(fromPosition: Int, toPosition: Int) {
@@ -52,12 +38,17 @@ class MovieAdapter(private val context: Context,
     }
 
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
-        val view = inflater.inflate(R.layout.list_item_fragment_movie, parent, false)
+    internal lateinit var tvShow: TVShow
+    internal var shareActionProvider : ShareActionProvider? = null
+    val dragStartListener : OnStartDragListener
+    init{
+        this.dragStartListener = dragStartListener
+    }
 
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder {
+        val view = inflater.inflate(R.layout.list_item_fragment_tv_show, parent, false)
 
         return ViewHolder(view)
-
     }
 
     override fun getItemCount(): Int {
@@ -65,19 +56,18 @@ class MovieAdapter(private val context: Context,
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        movie = getItem(position) as Movie
+        tvShow = getItem(position) as TVShow
 
-        val favoriteStar : ImageView = holder.itemView.findViewById(R.id.favorite_movie)
-        if(movie.favorite){
+        val favoriteStar : ImageView = holder.itemView.findViewById(R.id.favorite_tv_show)
+        if(tvShow.favorite){
             favoriteStar.visibility = View.VISIBLE
         }
         else{
             favoriteStar.visibility = View.GONE
         }
 
-        val rearrangeButton : ImageView
+        val rearrangeButton : Button
         rearrangeButton = holder.itemView.findViewById(R.id.rearrange_button)
-
         rearrangeButton.setOnTouchListener { view, motionEvent ->
             object : View.OnTouchListener{
                 override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
@@ -91,96 +81,92 @@ class MovieAdapter(private val context: Context,
             false
         }
 
-
         val vertMoreButton : Button
         vertMoreButton = holder.itemView.findViewById(R.id.more_options_button)
 
         vertMoreButton.setOnClickListener {
             Toast.makeText(context, "More Options", Toast.LENGTH_LONG).show()
-            showMoreOptionsMenu(it,movie, position)
+            showMoreOptionsMenu(it,tvShow, position)
         }
 
-        holder.itemView.setOnClickListener {view ->
+        holder.itemView.setOnClickListener { view ->
+            Toast.makeText(context, "Here", Toast.LENGTH_SHORT).show()
             val intent : Intent = NoteTakingActivity.newIntent(context)
             val activity : MainActivity = context as MainActivity
             view?.startAnimation(AnimationUtils.loadAnimation(context, R.anim.click_item_on_list))
-            intent.putExtra("category", "movie")
-            intent.putExtra("title", movie.title)
+            intent.putExtra("category", "tvShow")
+            intent.putExtra("title", tvShow.title)
             context.startActivity(intent)
             activity.overridePendingTransition(R.anim.left_to_right_enter, R.anim.left_to_right_exit)
+
         }
 
-        holder.titleTextView.text = movie.title
-        holder.directorTextView.text = movie.director
-        holder.yearTextView.text = movie.releaseDate.toString()
-        val APIKey = BuildConfig.ApiKey
-        val imdbURL = "http://omdbapi.com/?t=" + movie.title +"&apikey=" + APIKey
-        var APIResponse : String = ""
-        requestQueue = Volley.newRequestQueue(context)
-        if(movie.imageURL == "") {
-            
-        }
-        else{
-            holder.thumbnail.setImageURI(Uri.parse(movie.imageURL))
+
+        holder.titleTextView.text = tvShow.title
+        holder.seasonTextView.text = context.getString(R.string.season).format(tvShow.season)
+        holder.yearTextView.text = tvShow.releaseDate.toString()
+        if(tvShow.imageURL == "") {
+
+        }else {
+            holder.thumbnail.setImageURI(Uri.parse(tvShow.imageURL))
         }
 
 
     }
+
 
     internal lateinit var requestQueue : RequestQueue
 
     private val inflater: LayoutInflater
             = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
-
+    fun getItem(position: Int): Any {
+        return dataSource[position]
+    }
 
     override fun getItemId(position: Int): Long {
         return position.toLong()
     }
 
-    fun getItem(position: Int): Any {
-        return dataSource[position]
-    }
 
 
-    fun showMoreOptionsMenu(view : View, movie:Movie, position: Int){
+    fun showMoreOptionsMenu(view : View, tvShow: TVShow, position: Int){
         val moreOptionsMenu : PopupMenu = PopupMenu(context, view)
 
         moreOptionsMenu.setOnMenuItemClickListener{item ->
             val db = DatabaseHelper(context)
             when(item.itemId) {
                 R.id.popup_favorite -> {
-                    db.markAsFavorite(movie)
-                    movie.favorite = !movie.favorite
+                    db.markAsFavorite(tvShow)
+                    tvShow.favorite = !tvShow.favorite
                     this.notifyDataSetChanged()
+
                     true
                 }
                 R.id.popup_delete -> {
-                    val movie = dataSource[position]
-                    db.deleteMovie(movie.id)
-                    dataSource.remove(movie)
+                    val tvShow = dataSource[position]
+                    dataSource.remove(tvShow)
+                    db.deleteTVShow(tvShow.id)
                     this.notifyDataSetChanged()
                     true
                 }
                 R.id.popup_edit -> {
                     val intent = NoteEditActivity.newIntent(context)
-                    intent.putExtra("id", movie.id)
-                    intent.putExtra("title", movie.title)
-                    intent.putExtra("director", movie.director)
-                    intent.putExtra("year", movie.releaseDate)
-                    intent.putExtra("imageURL", movie.imageURL)
+                    intent.putExtra("id", tvShow.id)
+                    intent.putExtra("title", tvShow.title)
+                    intent.putExtra("director", tvShow.season)
+                    intent.putExtra("year", tvShow.releaseDate)
+                    intent.putExtra("imageURL", tvShow.imageURL)
                     intent.putExtra("type", "edit")
-                    (context as MainActivity).startActivityForResult(intent, 2)
-
-
+                    (context as MainActivity).startActivityForResult(intent,2)
 
                     true
                 }
-                R.id.popup_share-> {
-                    val movie = dataSource[position]
+                R.id.popup_share -> {
+                    val tvShow = dataSource[position]
                     shareActionProvider = item.actionProvider as? ShareActionProvider
                     val shareIntent = Intent(Intent.ACTION_SEND)
-                    val noteList = db.readNotes("movie", movie.title)
+                    val noteList = db.readNotes("movie", tvShow.title)
                     val noteListString : StringBuilder = StringBuilder()
                     for(note in noteList){
                         noteListString.append(note.noteBody+"\n")
@@ -188,10 +174,9 @@ class MovieAdapter(private val context: Context,
                     }
                     val extraText = noteListString.toString()
                     shareIntent.setType("text/plain")
-                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, movie.title)
+                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, tvShow.title)
                     shareIntent.putExtra(Intent.EXTRA_TEXT, extraText)
                     context.startActivity(Intent.createChooser(shareIntent,"Share Via..."))
-
                     true
                 }
                 else -> false
@@ -199,6 +184,7 @@ class MovieAdapter(private val context: Context,
         }
 
         moreOptionsMenu.inflate(R.menu.more_options_menu)
+
         try {
             val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
             fieldMPopup.isAccessible = true
@@ -217,22 +203,22 @@ class MovieAdapter(private val context: Context,
     fun onActivityResult(resultCode: Int, requestCode: Int, data: Intent?){
         Log.d("Main", "ON ACTIVITY RESULT MOVIES ADAPTER")
         val db = DatabaseHelper(context)
-        db.updateMovies(data!!.getStringExtra("title"), data.getStringExtra("director"), data.getIntExtra("year",0), data.getStringExtra("imageURL"), data.getIntExtra("id",0))
+        db.updateTVShow(data!!.getStringExtra("title"), data.getIntExtra("season",0), data.getIntExtra("year",0), data.getStringExtra("imageURL"), data.getIntExtra("id",0))
         notifyDataSetChanged()
     }
 
     public class ViewHolder : RecyclerView.ViewHolder {
 
         internal var titleTextView : TextView
-        internal var directorTextView : TextView
+        internal var seasonTextView : TextView
         internal var yearTextView : TextView
         internal var thumbnail : ImageView
 
         constructor(view: View) : super(view) {
-            titleTextView  = view.findViewById(R.id.category_list_title)
-            directorTextView = view.findViewById(R.id.category_list_subtitle)
-            yearTextView  = view.findViewById(R.id.category_list_detail)
-            thumbnail  = view.findViewById(R.id.category_list_thumbnail)
+            titleTextView = view.findViewById(R.id.category_list_title)
+            seasonTextView = view.findViewById(R.id.category_list_subtitle)
+            yearTextView = view.findViewById(R.id.category_list_detail)
+            thumbnail = view.findViewById(R.id.category_list_thumbnail)
         }
 
 

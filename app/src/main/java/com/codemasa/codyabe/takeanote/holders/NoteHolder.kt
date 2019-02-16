@@ -1,10 +1,12 @@
-package com.codemasa.codyabe.takeanote
+package com.codemasa.codyabe.takeanote.holders
 
 import android.content.Context
 import android.text.format.DateUtils.formatDateTime
 import android.widget.TextView
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import com.codemasa.codyabe.takeanote.R
+import com.codemasa.codyabe.takeanote.model.Note
 
 
 class NoteHolder internal constructor(val context: Context, itemView: View) : RecyclerView.ViewHolder(itemView) {

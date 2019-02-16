@@ -1,9 +1,8 @@
-package com.codemasa.codyabe.takeanote
+package com.codemasa.codyabe.takeanote.activities
 
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -14,9 +13,10 @@ import android.view.MenuItem
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import java.sql.Timestamp
-import java.time.Instant
-import java.time.format.DateTimeFormatter
+import com.codemasa.codyabe.takeanote.model.DatabaseHelper
+import com.codemasa.codyabe.takeanote.model.Note
+import com.codemasa.codyabe.takeanote.R
+import com.codemasa.codyabe.takeanote.adapters.NoteListAdapter
 
 class NoteTakingActivity : AppCompatActivity() {
 

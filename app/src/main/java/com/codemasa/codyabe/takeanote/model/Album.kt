@@ -1,20 +1,20 @@
-package com.codemasa.codyabe.takeanote
+package com.codemasa.codyabe.takeanote.model
 
 import java.sql.Date
 
 
-class TVShow{
+class Album{
 
     var id: Int = 0
     var title: String = ""
+    var artist: String = ""
     var releaseDate: Int = 0
     var imageURL : String = ""
-    var season: Int = 0
     var favorite : Boolean = false
 
-    constructor(title: String, season: Int, releaseDate: Int, imageURL: String) {
+    constructor(title: String, artist: String, releaseDate: Int, imageURL: String) {
         this.title = title
-        this.season = season
+        this.artist = artist
         this.releaseDate = releaseDate
         this.imageURL = imageURL
     }
